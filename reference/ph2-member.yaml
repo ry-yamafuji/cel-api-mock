@@ -223,7 +223,7 @@ paths:
   '/api/spot-charge/chargers/{chargerId}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: chargerId
         in: path
         required: true
@@ -240,7 +240,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  chargeLimitHour:
+                  chargeLimitHours:
                     type:
                       - integer
                       - 'null'
@@ -407,13 +407,12 @@ paths:
                   type: integer
                   description: コネクタID
                 usePoint:
-                  type:
-                    - integer
-                    - 'null'
+                  type: integer
                   description: 利用ポイント
               required:
                 - chargerId
                 - connectorId
+                - usePoint
             examples:
               Example 1:
                 value:
