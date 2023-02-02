@@ -41,13 +41,9 @@ paths:
                         description: 充電注文ID
                       shopName:
                         type: string
-                        minLength: 1
-                        maxLength: 20
                         description: 店舗名
                       connectorName:
                         type: string
-                        minLength: 1
-                        maxLength: 20
                         description: 充電場所
                       chargingTime:
                         type:
