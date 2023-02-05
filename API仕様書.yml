@@ -1,6 +1,6 @@
 openapi: 3.0.0
 x-stoplight:
-  id: pkpdqnzhleqi5
+  id: 4xfuik8ezb7mi
 info:
   title: API仕様書
   version: '1.0'
@@ -4840,10 +4840,8 @@ paths:
               examples:
                 example-1:
                   value:
-                    id: 1
-                    userName: string
-                    mailAddr: string
-                    userToken: string
+                    memberId: 5
+                    userToken: 1|xXuSEKkONsrCC75QPtJALvbuToH8o9x2HwrogYGQ
           headers: {}
         '400':
           description: Bad Request
@@ -16887,6 +16885,309 @@ paths:
         in: path
         required: true
         description: チャージャID（充電注文ID）
+  '/api/owners/{ownerId}/usage-situation':
+    get:
+      summary: 利用状況一覧取得
+      tags:
+        - Owner
+        - PH1.5
+      operationId: get-api-owners-ownerid-usage-situation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        shopName:
+                          type: string
+                          description: 店舗名
+                        connectorName:
+                          type: string
+                          description: 充電場所
+                        status:
+                          type: integer
+                          description: 'ステータス（0:依頼中 1:待機中 2:充電中 3:依頼取消 4:完了）'
+                        chargerTypeName:
+                          type: string
+                          description: 充電タイプ名
+                        chargeOutputName:
+                          type: integer
+                          description: 出力
+                          nullable: true
+                        chargeTime:
+                          type: integer
+                          description: 時間
+                          nullable: true
+                        chargePrice:
+                          type: integer
+                          description: 料金
+                          nullable: true
+                        startAt:
+                          type: string
+                          description: 開始時間
+                          nullable: true
+                        endAt:
+                          type: string
+                          description: 終了時間
+                          nullable: true
+                        memberName:
+                          type: string
+                          description: ユーザー
+                      required:
+                        - shopName
+                        - connectorName
+                        - status
+                        - chargerTypeName
+                        - memberName
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 1
+                    list:
+                      - shopName: ○○モール1号店
+                        connectorName: 東駐車場2番
+                        status: 1
+                        chargerTypeName: 急速
+                        memberName: メンバー１
+                      - shopName: ○○モール1号店
+                        connectorName: 東駐車場2番
+                        status: 2
+                        chargerTypeName: 急速
+                        chargeOutput: 30
+                        chargeTime: 100
+                        chargePrice: 2000
+                        startAt: '2023-01-20 12:00:00'
+                        endAt: '2023-01-20 13:40:00'
+                        memberName: string
+                      - shopName: ○○モール1号店
+                        connectorName: 東駐車場3番
+                        status: 4
+                        chargerTypeName: 急速
+                        chargeOutput: 30
+                        chargeTime: 110
+                        chargePrice: 2100
+                        startAt: '2023-01-20 12:10:00'
+                        endAt: '2023-01-20 13:40:00'
+                        memberName: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        利用状況情報を取得する(オーナー)
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471471354
+      parameters:
+        - schema:
+            type: string
+            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+            example: '2023-01-01 10:00:00'
+          in: query
+          name: searchFromAt
+          description: 期間指定_開始
+        - schema:
+            type: string
+            example: '2023-01-31 23:59:59'
+            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+          in: query
+          name: searchToAt
+          description: 期間指定_終了
+        - schema:
+            type: integer
+          in: query
+          name: searchShopId
+          description: 店舗指定
+        - schema:
+            type: string
+          in: query
+          name: searchConnectorName
+          description: 充電場所検索
+        - schema:
+            type: string
+          in: query
+          name: searchMemberName
+          description: 利用者検索
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+        - schema:
+            type: array
+            example:
+              - id: false
+              - name: true
+          in: query
+          name: orderBy
+          description: '並替順[{''id'',false},{''name'',true}]'
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: オーナーID
+  /api/owners/login:
+    post:
+      summary: オーナーログイン
+      operationId: post-owner-login
+      tags:
+        - Owner
+        - Auth
+        - PH1.5
+        - PH2.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                  ownerName:
+                    type: string
+                    minLength: 1
+                    maxLength: 30
+                    description: オーナー名
+                  userId:
+                    type: integer
+                    description: アプリユーザID
+                  userRole:
+                    type: integer
+                    description: アプリ権限
+                required:
+                  - ownerId
+                  - ownerName
+                  - userId
+                  - userRole
+              examples:
+                Example 1:
+                  value:
+                    ownerId: 1
+                    ownerName: ○○○モール○○店
+                    userId: 1
+                    userRole: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mailAddr:
+                  type: string
+                  maxLength: 255
+                  minLength: 1
+                  description: メールアドレス
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 20
+                  description: パスワード
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#@\-\+\$\&])([a-zA-Z0-9!#@\-\+\$\&]*)$'
+              required:
+                - mailAddr
+                - password
+            examples:
+              Example 1:
+                value:
+                  mailAddr: xxxxxx@xxxxxx.com
+                  password: passworD123#
+      description: |-
+        オーナー用管理アプリをログインする
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471471050
+    parameters: []
+  /api/owners/logout:
+    post:
+      summary: オーナーログアウト
+      operationId: post-owner-logout
+      tags:
+        - Owner
+        - PH1.5
+        - Auth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Example 1:
+                  value: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: オーナー用管理アプリをログアウトする
+    parameters: []
+
   /api/user:
     get:
       summary: 認証テスト
