@@ -1831,154 +1831,6 @@ paths:
                         sexCode: 1
                         shopId: 2
                         shopStr: 茨木本店
-                test:
-                  value:
-                    dataCount: 12
-                    list:
-                      - id: 1
-                        name: スマホ太郎
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '1980-01-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 2
-                        name: 開発花子
-                        addrRegion: 兵庫県
-                        addr: 兵庫市兵庫区兵庫1丁目１－１
-                        birthday: '1990-02-01'
-                        vehicleMaker: 2
-                        vehicleMakerStr: 日産
-                        vehicleType: 2
-                        vehicleTypeStr: コンパクトカー
-                        sexCode: 2
-                        shopId: 3
-                        shopStr: 神戸支店
-                      - id: 5
-                        name: テストユーザー11
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 6
-                        name: テストユーザー12
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 7
-                        name: テストユーザー13
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 8
-                        name: テストユーザー14
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 9
-                        name: テストユーザー15
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 10
-                        name: テストユーザー16
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 11
-                        name: テストユーザー17
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 12
-                        name: テストユーザー18
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 13
-                        name: テストユーザー19
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
-                      - id: 14
-                        name: テストユーザー20
-                        addrRegion: 大阪府
-                        addr: 大阪市大阪町大阪1丁目１－１
-                        birthday: '2000-12-01'
-                        vehicleMaker: 1
-                        vehicleMakerStr: トヨタ
-                        vehicleType: 1
-                        vehicleTypeStr: ファミリーカ
-                        sexCode: 1
-                        shopId: 2
-                        shopStr: 茨木本店
             application/xml:
               schema:
                 type: object
@@ -16340,12 +16192,6 @@ paths:
                       chargingTime: 40
                       chargingPrice: 1200
                       chargingStatus: null
-        '202':
-          description: Accepted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error202'
         '401':
           description: Unauthorized
           content:
@@ -17187,7 +17033,6 @@ paths:
                 $ref: '#/components/schemas/Error500'
       description: オーナー用管理アプリをログアウトする
     parameters: []
-
   /api/user:
     get:
       summary: 認証テスト
