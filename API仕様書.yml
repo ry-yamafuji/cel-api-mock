@@ -5347,54 +5347,29 @@ paths:
                             営業開始時間
 
                             店舗T
-                          format: time
+                          nullable: true
                         closeTime:
                           type: string
                           description: |-
                             営業終了時間
 
                             店舗T
-                          format: time
+                          nullable: true
               examples:
                 example-1(ステーション):
                   value:
                     list:
-                      - id: 1
-                        name: 茨木本店
-                        category: 1
-                        openTime: '08:30:00Z'
-                        closeTime: '19:30:00Z'
-                test:
-                  value:
-                    list:
                       - id: 2
-                        name: 茨木本店
+                        name: 茨木支店
                         category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
+                        openTime: null
+                        closeTime: null
                       - id: 3
-                        name: 神戸支店
+                        name: お客様本社
                         category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                example-2(すべて):
-                  value:
-                    list:
-                      - id: 1
-                        name: 本社
-                        category: 2
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                      - id: 2
-                        name: 茨木本店
-                        category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                      - id: 3
-                        name: 神戸支店
-                        category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
+                        openTime: null
+                        closeTime: null
+          headers: {}
         '500':
           description: Internal Server Error
       operationId: api-get-shops
