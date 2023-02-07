@@ -4799,7 +4799,6 @@ paths:
                   type: integer
                 mailAddr:
                   type: string
-                  format: email
                   maxLength: 255
                 password:
                   type: string
@@ -4812,6 +4811,7 @@ paths:
                 deviceToken:
                   type: string
                   description: デバイストークン
+                  nullable: true
             examples:
               example-(通常ログイン):
                 value:
