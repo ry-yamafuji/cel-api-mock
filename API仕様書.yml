@@ -4800,14 +4800,16 @@ paths:
                 mailAddr:
                   type: string
                   maxLength: 255
+                  nullable: true
                 password:
                   type: string
-                  format: password
                   maxLength: 20
                   description: パスワード
+                  nullable: true
                 userToken:
                   type: string
                   description: ユーザートークン
+                  nullable: true
                 deviceToken:
                   type: string
                   description: デバイストークン
@@ -4823,11 +4825,6 @@ paths:
                   memberId: 1
                   userToken: 03fdsgJsKSI545432dsd5gfg...
                   deviceToken: st03fdsgJsKSI545432dsd5gfg..
-              test:
-                value:
-                  mailAddr: devel@exsmple.com
-                  password: pass12tesT$
-                  deviceToken: 03fdsgJsKSI545432dsd5gfg
         description: |
           ①通常の認証(mailAddr And password)
           ②自動の認証(memberId And userToken) 
@@ -5359,17 +5356,33 @@ paths:
                 example-1(ステーション):
                   value:
                     list:
+                      - id: 1
+                        name: 茨木本店
+                        category: 1
+                        openTime: '08:30:00Z'
+                        closeTime: '19:30:00Z'
+                example-2(すべて):
+                  value:
+                    list:
+                      - id: 1
+                        name: 本社
+                        category: 2
+                        openTime: '08:00:00'
+                        closeTime: '19:00:00'
                       - id: 2
-                        name: 茨木支店
+                        name: 茨木本店
                         category: 1
-                        openTime: null
-                        closeTime: null
+                        openTime: '08:00:00'
+                        closeTime: '19:00:00'
                       - id: 3
-                        name: お客様本社
+                        name: 神戸支店
                         category: 1
-                        openTime: null
-                        closeTime: null
-          headers: {}
+                        openTime: '08:00:00'
+                        closeTime: '19:00:00'
+          headers:
+            header-0:
+              schema:
+                type: string
         '500':
           description: Internal Server Error
       operationId: api-get-shops
@@ -17008,6 +17021,804 @@ paths:
                 $ref: '#/components/schemas/Error500'
       description: オーナー用管理アプリをログアウトする
     parameters: []
+  '/api/owners/{ownerId}/shops':
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: オーナーID
+    get:
+      summary: オーナー店舗一覧取得
+      description: |-
+        オーナーの店舗一覧を取得する
+        【利用場面】
+      tags:
+        - Owner-Shop
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 店舗ID
+                          example: 1
+                        shopName:
+                          type: string
+                          description: 店舗名
+                          example: イオンモール 茨城店
+                        postNumber:
+                          type: string
+                          description: 郵便番号
+                          example: 〒567-0033
+                        addrRegion:
+                          type: string
+                          description: 都道府県
+                          example: 大阪府
+                        addr1:
+                          type: string
+                          description: 住所1
+                          example: 茨木市松本町8-30
+                        addr2:
+                          type: string
+                          description: 住所2
+                          example: null
+                          nullable: true
+                        phoneNumber:
+                          type: string
+                          description: 電話番号
+                          example: 090-1234-5678
+                        faxNumber:
+                          type: string
+                          description: FAX番号
+                          example: 090-1234-5678
+                        chargerCount:
+                          type: integer
+                          description: チャージャ台数
+                          example: 10
+                      required:
+                        - id
+                        - shopName
+                        - phoneNumber
+                        - faxNumber
+                        - chargerCount
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 2
+                    list:
+                      - id: 1
+                        shopName: イオンモール 茨城店
+                        postNumber: 〒567-0033
+                        addrRegion: 大阪府
+                        addr1: 茨木市松本町8-30
+                        addr2: null
+                        phoneNumber: 090-1234-5678
+                        faxNumber: 090-1234-5678
+                        chargerCount: 10
+                      - id: 2
+                        shopName: イオンモール 茨城店
+                        postNumber: 〒567-0033
+                        addrRegion: 大阪府
+                        addr1: 茨木市松本町8-30
+                        addr2: 大阪ビル8F
+                        phoneNumber: 090-1234-5678
+                        faxNumber: 090-1234-5678
+                        chargerCount: 10
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: get-api-owners-ownerId-shops
+  '/api/owners/{ownerId}/chargers':
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: オーナーID
+    get:
+      operationId: get-api-owners-ownerId-chargers
+      summary: オーナーチャージャ一覧取得
+      description: |-
+        オーナーのチャージャ一覧を取得する
+        【利用場面】
+
+        https://projects.invisionapp.com/d/main#/console/22228739/471786817/preview
+      tags:
+        - Owner-Charger
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: チャージャID
+                          example: 1
+                        isEnable:
+                          type: boolean
+                          description: 有効フラグ
+                          example: false
+                        shopId:
+                          type: integer
+                          description: 店舗ID
+                          example: 1
+                        shopName:
+                          type: string
+                          description: 店舗名
+                          example: イオンモール 茨城店
+                        chargerName:
+                          type: string
+                          description: チャージャ名
+                          example: 東1番口
+                        operationType:
+                          type: integer
+                          description: 運用タイプ
+                          example: 0
+                        note:
+                          type: string
+                          description: 備考
+                          example: 北側第一駐車場
+                          nullable: true
+                        groupiId:
+                          type: integer
+                          description: グループID
+                          example: 1
+                          nullable: true
+                        groupName:
+                          type: string
+                          description: グループ名
+                          example: A
+                          nullable: true
+                        workStartDate:
+                          type: string
+                          description: 稼働開始日
+                          example: '2023-01-01'
+                          format: date
+                      required:
+                        - id
+                        - isEnable
+                        - shopId
+                        - shopName
+                        - chargerName
+                        - operationType
+                        - workStartDate
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 2
+                    list:
+                      - id: 1
+                        isEnable: true
+                        shopId: 1
+                        shopName: イオンモール 茨城店
+                        chargerName: 東1番口
+                        operationType: 0
+                        note: 北側第一駐車場
+                        groupiId: 1
+                        groupName: A
+                        workStartDate: '2023-01-01'
+                      - id: 2
+                        isEnable: false
+                        shopId: 2
+                        shopName: イオンモール 吹田店
+                        chargerName: 東2番口
+                        operationType: 1
+                        note: 北側第2駐車場
+                        groupiId: null
+                        groupName: null
+                        workStartDate: '2023-01-01'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: searchShopId
+          description: 検索店舗ID
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+  /api/owners/collation:
+    post:
+      summary: オーナー照合
+      description: |-
+        オーナーを照合する
+        【利用場面】
+      tags:
+        - Owner
+        - PH1.5
+      operationId: post-api-owners-collation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                  reportName:
+                    type: string
+                    description: 帳票名
+                    example: イオンモール茨木\n中居太郎
+                  honorific:
+                    type: string
+                    minLength: 0
+                    maxLength: 5
+                    description: 敬称
+                    example: 様
+                  postNumber:
+                    type: string
+                    description: 郵便番号
+                    minLength: 9
+                    maxLength: 9
+                    pattern: '^〒[0-9]{3}-[0-9]{4}$'
+                    example: 〒111-1111
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪府
+                  addr1:
+                    type: string
+                    description: 住所１
+                    example: 茨木市
+                  addr2:
+                    type: string
+                    nullable: true
+                    description: 住所２
+                    example: 松ヶ本町８－３０
+                  paymentOptionCode:
+                    type: integer
+                    description: 支払方法コード
+                    example: 1
+                  note:
+                    type: string
+                    nullable: true
+                    example: オーナー備考
+                    description: 備考
+                required:
+                  - reportName
+                  - postNumber
+                  - addrRegion
+                  - addr1
+                  - ownerId
+                  - paymentOptionCode
+              examples:
+                Example 1:
+                  value:
+                    ownerId: 1
+                    reportName: イオンモール茨木\n中居太郎
+                    honorific: 様
+                    postNumber: 〒111-1111
+                    addrRegion: 大阪府
+                    addr1: 茨木市
+                    addr2: 松ヶ本町８－３０
+                    paymentOptionCode: 1
+                    note: ''
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerNumber:
+                  type: integer
+                  description: 取引先番号（"CO"を除く数字）
+                  example: 11111
+              required:
+                - customerNumber
+    parameters: []
+  /api/owners:
+    get:
+      summary: オーナー一覧取得
+      tags:
+        - Owner
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: オーナー一覧
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: オーナーID
+                          example: 1
+                        customerNumber:
+                          type: string
+                          description: 取引先番号（"CO"＋オーナーID5桁0埋め）
+                          example: CO00001
+                        ownerName:
+                          type: string
+                          description: 取引先名
+                          example: イオンモール
+                        contactName:
+                          type: string
+                          nullable: true
+                          example: 中居太郎
+                          description: 担当者名
+                        phoneNumber:
+                          type: string
+                          example: 06-1111-1111
+                          description: 電話番号
+                        addrRegion:
+                          type: string
+                          example: 大阪
+                          description: 都道府県
+                        shopNum:
+                          type: integer
+                          example: 5
+                          description: 所有店舗数
+                      required:
+                        - id
+                        - customerNumber
+                        - ownerName
+                        - phoneNumber
+                        - addrRegion
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 1
+                    list:
+                      - id: 1
+                        customerNumber: CO00001
+                        ownerName: イオンモール
+                        contactName: 中居太郎
+                        phoneNumber: 06-1111-1111
+                        addrRegion: 大阪
+                        shopNum: 5
+                      - id: 2
+                        customerNumber: CO00002
+                        ownerName: タイムズ
+                        contactName: 稲垣次郎
+                        phoneNumber: 06-1111-1111
+                        addrRegion: 大阪
+                        shopNum: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-api-owner
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471422576
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: keyword
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+    post:
+      summary: オーナー登録
+      tags:
+        - Owner
+        - PH1.5
+      operationId: post-api-owner
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                required:
+                  - ownerId
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        $ref: '#/components/requestBodies/Owner'
+      description: |-
+        オーナー情報を登録する
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471423993
+    parameters: []
+  '/api/owners/{ownerId}':
+    parameters:
+      - schema:
+          type: string
+        name: ownerId
+        in: path
+        required: true
+        description: ログイン時に保持しているオーナーID
+    get:
+      summary: オーナー詳細
+      tags:
+        - Owner
+        - PH1.5
+      operationId: get-api-owners-owner-id
+      description: |-
+        オーナー情報の詳細を取得する
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471441724
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerNumber:
+                    type: string
+                    description: 取引先番号（"CO"＋オーナーID5桁0埋め）
+                    example: CO00001
+                  ownerName:
+                    type: string
+                    minLength: 1
+                    maxLength: 30
+                    description: 取引先名
+                    example: イオンモール
+                  contactName:
+                    type: string
+                    nullable: true
+                    description: 担当者名
+                    example: 中居太郎
+                  mailAddr:
+                    type: string
+                    description: メールアドレス
+                    example: nakai@eaon-maill.co.jp
+                  defaultPassword:
+                    type: string
+                    nullable: true
+                    description: 初期パスワード
+                    example: abcdef1234
+                  phoneNumber:
+                    type: string
+                    description: 電話番号
+                    example: 090-1234-5678
+                  postNumber:
+                    type: string
+                    description: 郵便番号
+                    example: 〒111-1111
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪
+                  addr1:
+                    type: string
+                    description: 住所１
+                    example: 茨木市
+                  addr2:
+                    type: string
+                    nullable: true
+                    description: 住所２
+                    example: 松が本町8-30
+                  closingDateCode:
+                    type: integer
+                    description: 締め日コード
+                    example: 1
+                  closingDateStr:
+                    type: string
+                    description: 締め日
+                    example: 月末
+                  paymentOptionCode:
+                    type: integer
+                    description: 支払方法コード
+                    example: 1
+                  paymentOptionStr:
+                    type: string
+                    description: 支払方法
+                    example: 振込
+                  reportName:
+                    type: string
+                    nullable: true
+                    description: 帳票宛先名
+                    example: イオンモール\n中居 太郎
+                  honorific:
+                    type: string
+                    nullable: true
+                    description: 帳票敬称
+                    example: 様
+                  note:
+                    type: string
+                    nullable: true
+                    description: 備考
+                    example: オーナー備考
+                  transferAccountName:
+                    type: string
+                    nullable: true
+                    description: 振込先口座名称（支払方法コードが「1(振込)」の場合は必須入力）
+                    example: EV運用口座
+                  transferAccountNumber:
+                    type: string
+                    nullable: true
+                    description: 振込先口座番号（支払方法コードが「1(振込)」の場合は必須入力）
+                    example: '12345678'
+                  transferAccountTypeName:
+                    type: string
+                    nullable: true
+                    description: 振込先口座種類（支払方法コードが「1(振込)」の場合は必須入力）
+                    example: '当座'
+                  transferBank:
+                    type: string
+                    nullable: true
+                    description: 振込先口座銀行名（支払方法コードが「1(振込)」の場合は必須入力）
+                    example: 'りそな'
+                  transferBankBranch:
+                    type: string
+                    nullable: true
+                    description: 振込先口座支店名（支払方法コードが「1(振込)」の場合は必須入力）
+                    example: '梅田支店'
+                required:
+                  - customerNumber
+                  - ownerName
+                  - mailAddr
+                  - phoneNumber
+                  - postNumber
+                  - addrRegion
+                  - addr1
+                  - closingDateCode
+                  - closingDateStr
+                  - paymentOptionCode
+                  - paymentOptionStr
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    put:
+      summary: オーナー更新
+      operationId: put-api-ph2-owner-id
+      tags:
+        - Owner
+        - PH1.5
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471441781
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        $ref: '#/components/requestBodies/Owner'
+    delete:
+      summary: オーナー削除
+      operationId: delete-api-ph2-owner-id
+      tags:
+        - Owner
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items: {}
+              examples:
+                Example 1:
+                  value: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: オーナー情報を削除する        
   /api/user:
     get:
       summary: 認証テスト
@@ -17021,7 +17832,6 @@ paths:
       description: 認証機能-デバッグ用
       security:
         - MEMBER-TOKEN: []
-    parameters: []
 servers:
   - url: 'http://localhost'
   - description: AWS
@@ -17129,6 +17939,160 @@ components:
         - msg
       x-stoplight:
         id: c3489106265bf
+  requestBodies:
+    Owner:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownerName:
+                type: string
+                minLength: 1
+                maxLength: 30
+                description: 取引先名
+                example: イオンモール
+              contactName:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 30
+                description: 担当者名
+                example: 中居太郎
+              mailAddr:
+                type: string
+                maxLength: 255
+                minLength: 1
+                description: メールアドレス
+                example: nakai@eaon-maill.co.jp
+              phoneNumber:
+                type: string
+                minLength: 1
+                maxLength: 15
+                description: 電話番号
+                example: 090-1234-5678
+              postNumber:
+                type: integer
+                description: 郵便番号
+                example: 1234567
+                minimum: 1
+                maximum: 9999999
+              addrRegion:
+                type: string
+                description: 都道府県
+                example: 大阪府
+                minLength: 1
+                maxLength: 5
+              addr1:
+                type: string
+                description: 住所１
+                example: 茨木市
+                minLength: 1
+                maxLength: 30
+              addr2:
+                type: string
+                nullable: true
+                description: 住所２
+                example: 松が本町8-30
+                minLength: 0
+                maxLength: 30
+              closingDateCode:
+                type: integer
+                description: 締め日コード
+                example: 1
+              paymentOptionCode:
+                type: integer
+                description: 支払方法コード
+                example: 1
+              reportName:
+                type: string
+                nullable: true
+                description: 帳票宛先名
+                minLength: 0
+                maxLength: 60
+                example: イオンモール\n田中
+              honorific:
+                type: string
+                nullable: true
+                description: 帳票敬称
+                minLength: 0
+                maxLength: 5
+                example: 様
+              note:
+                type: string
+                nullable: true
+                description: 備考
+                minLength: 0
+                maxLength: 255
+                example: オーナー備考
+              transferAccountName:
+                type: string
+                nullable: true
+                description: 振込先口座名称（支払方法コードが「1(振込)」の場合は必須入力）
+                minLength: 0
+                maxLength: 30
+                example: EV運用口座
+              transferAccountNumber:
+                type: string
+                nullable: true
+                description: 振込先口座番号（支払方法コードが「1(振込)」の場合は必須入力）
+                minLength: 0
+                maxLength: 8
+                example: '01234567'
+              transferAccountTypeName:
+                type: string
+                nullable: true
+                description: 振込先口座種類（支払方法コードが「1(振込)」の場合は必須入力）
+                maxLength: 10
+                minLength: 0
+                example: 当座
+              transferBank:
+                type: string
+                nullable: true
+                description: 振込先口座銀行名（支払方法コードが「1(振込)」の場合は必須入力）
+                minLength: 0
+                maxLength: 10
+                example: りそな銀行
+              transferBankBranch:
+                type: string
+                nullable: true
+                description: 振込先口座支店名（支払方法コードが「1(振込)」の場合は必須入力）
+                minLength: 0
+                maxLength: 10
+                example: 梅田支店
+            required:
+              - ownerName
+              - mailAddr
+              - phoneNumber
+              - postNumber
+              - addrRegion
+              - addr1
+              - closingDateCode
+              - paymentOptionCode
+          examples:
+            Example 1:
+              value:
+                ownerName: イオンモール
+                contactName: 中居太郎
+                mailAddr: nakai@eaon-maill.co.jp
+                phoneNumber: 090-1234-5678
+                postNumber: 1234567
+                addrRegion: 大阪府
+                addr1: 茨木市
+                addr2: 松が本町8-30
+                closingDateCode: 1
+                paymentOptionCode: 1
+                reportName: イオンモール\n田中
+                honorific: 様
+                note: オーナー備考
+                transferAccountName: EV運用口座
+                transferAccountNumber: '01234567'
+                transferAccountTypeName: 当座
+                transferBank: りそな銀行
+                transferBankBranch: 梅田支店
+
+
+
 tags:
   - name: System
     description: システムに関する API 群です
@@ -17166,6 +18130,8 @@ tags:
     description: オーナーに関する API 群です
   - name: Owner-Shop
     description: オーナーの店舗に関する API 群です
+  - name: Owner-Charger
+    description: オーナーの充電器に関する API 群です
   - name: Owner-User
     description: オーナーのアプリユーザーに関する API 群です
   - name: Owner-Available-Member
