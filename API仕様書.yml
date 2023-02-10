@@ -16118,17 +16118,17 @@ paths:
                         maxLength: 20
                         description: 充電場所
                       chargingTime:
-                        type: integer
-                        nullable: true
+                        type: string
                         description: 経過時間
+                        nullable: true
                       chargingPrice:
                         type: integer
-                        nullable: true
                         description: 料金
+                        nullable: true
                       chargingStatus:
                         type: integer
-                        nullable: true
                         description: 充電残量
+                        nullable: true
                     required:
                       - chargeOrderId
                       - shopName
@@ -16166,7 +16166,7 @@ paths:
                       chargeOrderId: 2
                       shopName: イオン茨城店
                       connectorName: 東3
-                      chargingTime: 40
+                      chargingTime: '00:40:00'
                       chargingPrice: 1200
                       chargingStatus: 65
                 Example-充電中(普通充電):
@@ -16177,8 +16177,8 @@ paths:
                       chargeOrderId: 2
                       shopName: イオン茨城店
                       connectorName: 東3
-                      chargingTime: 40
-                      chargingPrice: 1200
+                      chargingTime: '01:40:00'
+                      chargingPrice: 2200
                       chargingStatus: null
         '401':
           description: Unauthorized
@@ -16754,7 +16754,7 @@ paths:
                         chargerTypeName:
                           type: string
                           description: 充電タイプ名
-                        chargeOutputName:
+                        chargeOutput:
                           type: integer
                           description: 出力
                           nullable: true
@@ -16892,7 +16892,7 @@ paths:
               - name: true
           in: query
           name: orderBy
-          description: '並替順[{''id'',false},{''name'',true}]'
+          description: '並替順[{"startAt":False},{"shopName":True}]'
     parameters:
       - schema:
           type: integer
@@ -17703,17 +17703,17 @@ paths:
                     type: string
                     nullable: true
                     description: 振込先口座種類（支払方法コードが「1(振込)」の場合は必須入力）
-                    example: '当座'
+                    example: 当座
                   transferBank:
                     type: string
                     nullable: true
                     description: 振込先口座銀行名（支払方法コードが「1(振込)」の場合は必須入力）
-                    example: 'りそな'
+                    example: りそな
                   transferBankBranch:
                     type: string
                     nullable: true
                     description: 振込先口座支店名（支払方法コードが「1(振込)」の場合は必須入力）
-                    example: '梅田支店'
+                    example: 梅田支店
                 required:
                   - customerNumber
                   - ownerName
@@ -17818,7 +17818,1561 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error500'
-      description: オーナー情報を削除する        
+      description: オーナー情報を削除する
+  /sys/division-masters/pl-statements:
+    get:
+      summary: 区分マスタ-明細書項目カテゴリ一覧取得
+      tags:
+        - PL-Statement
+        - PH1.5
+      operationId: get-sys-division-masters-pl-statements
+      description: |
+        区分マスタ-明細書項目カテゴリ一覧取得
+
+        WAO.04.画面設計_明細項目一覧.xlsx
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          description: コード
+                        value1:
+                          type: string
+                          description: 値1
+              examples:
+                Example 1:
+                  value:
+                    list:
+                      - code: 1
+                        value1: 充電収益
+                      - code: 2
+                        value1: その他収益
+                      - code: 3
+                        value1: 月間費用
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  /api/pl-statement/items:
+    get:
+      summary: 明細項目マスタ一覧取得
+      tags:
+        - PL-Statement-Item
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    description: 費用項目一覧
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 収益項目マスタID
+                          example: 1
+                        type:
+                          type: integer
+                          description: 収支区分
+                          example: 8
+                        groupName:
+                          type: string
+                          description: カテゴリ名
+                          example: 充電収益
+                        itemName:
+                          type: string
+                          description: 項目名
+                          example: EVチャージャ-充電代
+                        unitPrice:
+                          type: number
+                          description: 単価
+                          example: 40
+                          nullable: true
+                        unit:
+                          type: string
+                          description: 単位
+                          example: 分
+                          nullable: true
+                        taxType:
+                          type: integer
+                          description: '税区分(0:課税 1:非課税 2:軽減税率)'
+                          example: 0
+                        note:
+                          type: string
+                          example: 備考
+                          description: 備考
+                          nullable: true
+                      required:
+                        - id
+                        - type
+                        - groupName
+                        - itemName
+                        - taxType
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 2
+                    list:
+                      - id: 1
+                        type: 8
+                        groupName: 充電収益
+                        itemName: EVチャージャ-充電代
+                        unitPrice: 40
+                        unit: 分
+                        taxType: 0
+                        note: 充電代
+                      - id: 2
+                        type: 9
+                        groupName: 管理費
+                        itemName: システム管理費
+                        unitPrice: 100
+                        unit: 月
+                        taxType: 0
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-api-pl-statements-categories
+      description: |-
+        明細項目マスタを一覧取得する
+
+        【利用場面】
+
+        WAO.04.画面設計_明細項目一覧
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+        - schema:
+            type: integer
+          in: query
+          name: searchGroup
+          description: 検索カテゴリ
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+    post:
+      summary: 明細項目マスタ登録
+      operationId: post-api-pl-statements-items
+      tags:
+        - PL-Statement-Item
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        明細項目マスタを登録する
+
+        【利用場面】
+
+        WAO.04.画面設計_明細項目一覧
+      requestBody:
+        $ref: '#/components/requestBodies/PlStatementItem'
+    parameters: []
+  '/api/pl-statement/items/{itemId}':
+    parameters:
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+        description: 明細項目マスタID
+    get:
+      summary: 明細項目マスタ詳細
+      tags:
+        - PL-Statement-Item
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupCode:
+                    type: integer
+                    example: 1
+                    description: カテゴリコード
+                  itemName:
+                    type: string
+                    example: EVチャージャ-充電代
+                    description: 項目名
+                  unitPrice:
+                    type: number
+                    example: 40
+                    nullable: true
+                    description: 単価
+                  unit:
+                    type: string
+                    nullable: true
+                    example: 台
+                    description: 単位
+                  note:
+                    type: string
+                    nullable: true
+                    description: 備考
+                  taxType:
+                    type: integer
+                    description: 税区分
+                    example: 0
+              examples:
+                Example 1:
+                  value:
+                    groupCode: 1
+                    itemName: EVチャージャ-充電代
+                    unitPrice: 40
+                    unit: 台
+                    note: string
+                    taxType: 0
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-api-pl-statements-items-itemid
+      description: |-
+        費用項目を詳細取得する
+
+        【利用場面】
+
+        WAO.04.画面設計_明細項目一覧
+    put:
+      summary: 明細項目マスタ更新
+      operationId: put-api-pl-statements-items-itemid
+      tags:
+        - PL-Statement-Item
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        明細項目マスタを更新する
+
+        【利用場面】
+
+        WAO.04.画面設計_明細項目一覧
+      requestBody:
+        $ref: '#/components/requestBodies/PlStatementItem'
+    delete:
+      summary: 明細項目マスタ削除
+      operationId: delete-api-pl-statements-items-itemid
+      tags:
+        - PL-Statement-Item
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items: {}
+              examples:
+                Example 1:
+                  value: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        明細項目マスタを削除する
+
+        【利用場面】
+
+        WAO.04.画面設計_明細項目一覧
+  /api/pl-statements:
+    get:
+      summary: 明細書一覧取得
+      operationId: get-api-pl-statements
+      tags:
+        - PL-Statement
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    description: 明細書一覧
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 収益明細ID
+                          example: 1
+                        slipNumber:
+                          type: string
+                          description: 伝票番号
+                          example: 23-08000
+                        type:
+                          type: integer
+                          description: '区分（1:支払通知書:2:請求書 ）'
+                          example: 2
+                        ownerName:
+                          type: string
+                          description: 取引先名
+                          example: イオンモール茨城
+                        contactName:
+                          type: string
+                          nullable: true
+                          description: 担当者名
+                          example: 田島貴男
+                        targetYM:
+                          type: string
+                          description: 対象月
+                          example: 2022/11
+                        issueDate:
+                          type: string
+                          nullable: true
+                          description: 発行日
+                          example: 2022/12/10
+                        amount:
+                          type: integer
+                          description: 金額
+                          example: 4300000
+                        status:
+                          type: integer
+                          description: 'ステータス(0:未発行 1:発行)'
+                          example: 1
+                      required:
+                        - id
+                        - slipNumber
+                        - type
+                        - ownerName
+                        - targetYM
+                        - amount
+                        - status
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 2
+                    list:
+                      - id: 2
+                        slipNumber: 23-0804
+                        type: 1
+                        ownerName: タイムズ四条畷
+                        contactName: 田島貴男
+                        targetYM: 2022/11
+                        issueDate: ''
+                        amount: 4300000
+                        status: 0
+                      - id: 1
+                        slipNumber: 23-0800
+                        type: 2
+                        ownerName: イオンモール茨城
+                        contactName: 田島貴男
+                        targetYM: 2022/11
+                        issueDate: 2022/12/10
+                        amount: 4300000
+                        status: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471352497
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: searchType
+          description: 区分
+        - schema:
+            type: string
+          in: query
+          name: searchTargetYM
+          description: 対象月
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+        - schema:
+            type: integer
+          in: query
+          name: searchStatus
+          description: ステータス
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+    post:
+      summary: 明細書登録
+      operationId: post-api-ph2-pl-statements
+      tags:
+        - PL-Statement
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plStatementId:
+                    type: integer
+                    description: 収益明細ID
+                required:
+                  - plStatementId
+              examples:
+                Example 1:
+                  value:
+                    plStatementId: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471488690
+      requestBody:
+        $ref: '#/components/requestBodies/PlStatement'
+    parameters: []
+  '/api/pl-statements/{plStatementId}':
+    parameters:
+      - schema:
+          type: integer
+        name: plStatementId
+        in: path
+        required: true
+        description: 収益明細ID
+    get:
+      summary: 明細書詳細
+      tags:
+        - PL-Statement
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: integer
+                    description: '区分（1:請求書 2:支払通知書）'
+                    example: 2
+                  issueDate:
+                    type: string
+                    nullable: true
+                    description: 発行日
+                    example: null
+                  slipNumber:
+                    type: string
+                    description: 伝票番号（年下2桁＋"-"＋収益明細ID7桁0埋め）
+                    example: 23-08001
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                    example: 1
+                  postNumber:
+                    type: string
+                    description: 郵便番号
+                    example: 〒111-1111
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪府
+                  addr1:
+                    type: string
+                    description: 住所１
+                    example: 茨木市
+                  addr2:
+                    type: string
+                    nullable: true
+                    description: 住所２
+                    example: 松か本町8-30
+                  reportName:
+                    type: string
+                    nullable: true
+                    description: 帳票宛先名
+                    example: イオンモール茨城\n中居太郎
+                  honorific:
+                    type: string
+                    nullable: true
+                    description: 敬称
+                    example: 様
+                  targetYM:
+                    type: string
+                    description: 対象年月
+                    example: 2023-01
+                  note:
+                    type: string
+                    nullable: true
+                    description: 備考
+                    example: null
+                  prepaidAmount:
+                    type: integer
+                    description: 前払金額
+                    example: 50000
+                  unpaidAmount:
+                    type: integer
+                    description: 未払金額
+                    example: 100000
+                  totalAmountWithoutTax:
+                    type: integer
+                    description: 合計金額（税別）
+                    example: 744000
+                  totalAmountOfTax:
+                    type: integer
+                    description: 消費税額
+                    example: 2400
+                  taxRate:
+                    type: integer
+                    example: 10
+                    description: 消費税率
+                  totalAmountOfReducedTax:
+                    type: integer
+                    description: 軽減税額
+                    example: 48000
+                  reducedTaxRate:
+                    type: integer
+                    example: 8
+                    description: 軽減税率
+                  paymentDueDate:
+                    type: string
+                    nullable: true
+                    pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+                    description: 支払い期日
+                    example: '2023-02-15'
+                  paymentOptionCode:
+                    type: integer
+                    nullable: true
+                    description: 支払方法コード
+                    example: 1
+                  senderShopId:
+                    type: integer
+                    description: 差出店舗ID
+                    example: 1
+                  reportStatemets:
+                    type: array
+                    description: 明細書詳細
+                    items:
+                      type: object
+                      properties:
+                        shopId:
+                          type: integer
+                          description: 店舗ID
+                          example: 8
+                        details:
+                          type: array
+                          description: 明細書詳細情報
+                          items:
+                            type: object
+                            properties:
+                              category:
+                                type: integer
+                                description: カテゴリ
+                                example: 1
+                              itemName:
+                                type: string
+                                description: 品名
+                                example: 6Kw-通常時間
+                              quantity:
+                                type: number
+                                nullable: true
+                                description: 数量
+                                example: 10000
+                              unit:
+                                type: string
+                                nullable: true
+                                description: 単位
+                                example: 分
+                              taxType:
+                                type: integer
+                                description: 税区分
+                                example: 2
+                              unitPrice:
+                                type: number
+                                nullable: true
+                                description: 単価
+                                example: 60
+                              amount:
+                                type: integer
+                                description: 金額
+                                example: 600000
+                              note:
+                                type: string
+                                nullable: true
+                                description: 備考
+                                example: 自動作成
+                              isAuto:
+                                type: boolean
+                                description: 自動フラグ
+                                example: true
+                            required:
+                              - category
+                              - itemName
+                              - taxType
+                              - amount
+                              - isAuto
+                      required:
+                        - shopId
+                required:
+                  - type
+                  - slipNumber
+                  - ownerId
+                  - postNumber
+                  - addrRegion
+                  - addr1
+                  - targetYM
+                  - prepaidAmount
+                  - unpaidAmount
+                  - totalAmountWithoutTax
+                  - totalAmountOfTax
+                  - taxRate
+                  - totalAmountOfReducedTax
+                  - reducedTaxRate
+                  - senderShopId
+              examples:
+                Example 1:
+                  value:
+                    type: 2
+                    issueDate: null
+                    slipNumber: 23-08001
+                    ownerId: 1
+                    postNumber: 〒111-1111
+                    addrRegion: 大阪府
+                    addr1: 茨木市
+                    addr2: 松か本町8-30
+                    reportName: イオンモール茨城\n中居太郎
+                    honorific: 様
+                    targetYM: 2023-01
+                    note: null
+                    prepaidAmount: 50000
+                    unpaidAmount: 100000
+                    totalAmountWithoutTax: 744000
+                    totalAmountOfTax: 2400
+                    taxRate: 10
+                    totalAmountOfReducedTax: 48000
+                    reducedTaxRate: 8
+                    paymentDueDate: '2023-02-15'
+                    paymentOptionCode: 1
+                    reconciliationAt: '2023-02-15'
+                    reconciliationPerson: 0
+                    senderShopId: 1
+                    reportStatemets:
+                      - shopId: 1
+                        details:
+                          - category: 1
+                            itemName: 6Kw-通常時間
+                            quantity: 10000
+                            unit: 分
+                            taxType: 2
+                            unitPrice: 60
+                            amount: 600000
+                            note: 自動作成
+                            isAuto: true
+                          - category: 1
+                            itemName: 3Kw-通常時間
+                            quantity: 20000
+                            unit: 分
+                            taxType: 2
+                            unitPrice: 60
+                            amount: 120000
+                            note: 自動作成
+                            isAuto: false
+                      - shopId: 2
+                        details:
+                          - category: 1
+                            itemName: 6Kw-通常時間
+                            quantity: 500
+                            unit: 分
+                            taxType: 0
+                            unitPrice: 60
+                            amount: 30000
+                            note: 自動作成
+                            isAuto: true
+                          - category: 1
+                            itemName: 3Kw-通常時間
+                            quantity: -100
+                            unit: 分
+                            taxType: 2
+                            unitPrice: 60
+                            amount: 6000
+                            note: 自動作成
+                            isAuto: false
+          headers: {}
+      operationId: get-api-ph2-pl-statements-id
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471352498
+    put:
+      summary: 明細書更新
+      operationId: put-api-ph2-pl-statements-id
+      tags:
+        - PL-Statement
+        - PH1.5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471352499
+      requestBody:
+        $ref: '#/components/requestBodies/PlStatement'
+    delete:
+      summary: 明細書削除
+      operationId: delete-api-ph2-pl-statements-id
+      tags:
+        - PL-Statement
+        - PH1.5
+      description: |
+        明細書を削除する
+
+        【利用場面】
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  '/api/pl-statements/{plStatementId}/issue':
+    parameters:
+      - schema:
+          type: string
+        name: plStatementId
+        in: path
+        required: true
+        description: 収益明細ID
+    post:
+      summary: 明細書発行
+      operationId: post-api-pl-statements-id-issue
+      tags:
+        - PL-Statement
+        - PH1.5
+      description: |
+        明細書を発行する
+
+        【利用場面】
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471352498
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  '/api/pl-statements/{plStatementId}/display':
+    parameters:
+      - schema:
+          type: string
+        name: plStatementId
+        in: path
+        required: true
+        description: 収益明細ID
+    get:
+      summary: 明細書表示
+      operationId: post-api-pl-statements-id-display
+      tags:
+        - PL-Statement
+        - PH1.5
+      description: |
+        明細書のプレビュー画面の情報を取得する
+
+        【利用場面】
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471352498
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: 'ステータス(0:未発行 1:発行)'
+                    example: 1
+                  type:
+                    type: integer
+                    description: '区分（1:請求書 2:支払通知書）'
+                    example: 2
+                  issueDate:
+                    type: string
+                    description: 発行日
+                    example: null
+                    nullable: true
+                  slipNumber:
+                    type: string
+                    description: 伝票番号（年下2桁＋"-"＋収益明細ID7桁0埋め）
+                    example: 23-08001
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                    example: 1
+                  ownerName:
+                    type: string
+                    description: 取引先名
+                    example: イオンモール
+                  ownerNote:
+                    type: string
+                    description: 備考
+                    example: オーナー用備考/Ph2では削除予定
+                    nullable: true
+                required:
+                  - status
+                  - type
+                  - slipNumber
+                  - ownerId
+                  - ownerName
+              examples:
+                Example 1:
+                  value:
+                    status: 1
+                    type: 2
+                    issueDate: null
+                    slipNumber: 23-08001
+                    ownerId: 1
+                    ownerName: イオンモール
+                    ownerNote: オーナー用備考/Ph2では削除予定
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+  /api/chargers/groups:
+    get:
+      summary: チャージャグループ一覧取得
+      tags:
+        - Charger-Group
+        - PH2.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    description: チャージャグループ一覧
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: グループID
+                          example: 1
+                        customerNumber:
+                          type: string
+                          description: 取引先番号
+                          example: CO00001
+                        ownerName:
+                          type: string
+                          description: 取引先名
+                          example: イオンモール
+                        shopName:
+                          type: string
+                          description: 店舗名
+                          example: イオンモール茨城
+                        name:
+                          type: string
+                          description: グループ名
+                          example: Aグループ
+                        chargerNum:
+                          type: integer
+                          description: 台数
+                          example: 5
+                        chargerTypeName:
+                          type: string
+                          description: 充電タイプ名
+                          example: 急速
+                        demandType:
+                          type: integer
+                          description: デマンドタイプ
+                          example: 1
+                          nullable: true
+                        controlCurrent:
+                          type: number
+                          description: 制御電流
+                          example: 60
+                          nullable: true
+                      required:
+                        - customerNumber
+                        - ownerName
+                        - shopName
+                        - name
+                        - chargerNum
+                        - chargerTypeName
+                required:
+                  - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 3
+                    list:
+                      - id: 1
+                        customerNumber: CO00001
+                        ownerName: イオンモール
+                        shopName: イオンモール茨城
+                        name: Aグループ
+                        chargerNum: 5
+                        chargerTypeName: 急速
+                        demandType: 1
+                        controlCurrent: 60
+                      - id: 2
+                        customerNumber: CO00002
+                        ownerName: イオンモール
+                        shopName: イオンモール茨城
+                        name: Bグループ
+                        chargerNum: 2
+                        chargerTypeName: 急速
+                        demandType: null
+                        controlCurrent: null
+                      - id: 3
+                        customerNumber: CO00003
+                        ownerName: イオンモール
+                        shopName: イオンモール茨城
+                        name: Cグループ
+                        chargerNum: 5
+                        chargerTypeName: 急速
+                        demandType: 2
+                        controlCurrent: 60
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-api-chargers-groups
+      description: |-
+        チャージャグループ一覧を取得する
+
+        【利用場面】
+        WAO.05.画面設計_チャージャグループ
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+        - schema:
+            type: integer
+          in: query
+          name: searchCustomerNumber
+          description: 検索取引先番号
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+    post:
+      summary: チャージャグループ登録
+      operationId: post-api-charger-groups
+      tags:
+        - Charger-Group
+        - PH2.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |
+        【利用場面】
+      requestBody:
+        $ref: '#/components/requestBodies/ChargerGroup'
+    parameters: []
+  '/api/chargers/groups/{groupId}':
+    parameters:
+      - schema:
+          type: string
+        name: groupId
+        in: path
+        required: true
+    get:
+      summary: チャージャグループ詳細
+      tags:
+        - Charger-Group
+        - PH2.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                    example: 1
+                  customerNumber:
+                    type: string
+                    description: 取引先番号
+                    example: CO00001
+                  ownerName:
+                    type: string
+                    description: 取引先名
+                    example: イオンモール
+                  shopId:
+                    type: integer
+                    description: 店舗ID
+                    example: 1
+                  shopName:
+                    type: string
+                    description: 店舗名
+                    example: イオンモール茨城
+                  name:
+                    type: string
+                    description: グループ名
+                    example: Aグループ
+                  chargerInfo:
+                    type: array
+                    description: チャージャ情報
+                    items:
+                      type: object
+                      nullable: true
+                      properties:
+                        chargerId:
+                          type: integer
+                          description: チャージャID
+                        chargerName:
+                          type: string
+                          example: 1番、2番
+                  chargerType:
+                    type: integer
+                    description: 充電タイプ
+                    example: 2
+                  chargerTypeName:
+                    type: string
+                    description: 充電タイプ名
+                    example: 普通
+                  isLimitrUnitPrice:
+                    type: boolean
+                    example: true
+                    description: 通常料金制限フラグ
+                  lowerUnitPrice:
+                    type: integer
+                    example: 40
+                    description: 通常料金下限単価
+                    nullable: true
+                  upperUnitPrice:
+                    type: integer
+                    example: 40
+                    description: 通常料金_上限単価
+                    nullable: true
+                  demandType:
+                    type: integer
+                    description: デマンドタイプ
+                    example: 1
+                    nullable: true
+                  controlCurrent:
+                    type: number
+                    description: 制御電流
+                    example: 60
+                    nullable: true
+                  voltage:
+                    type: number
+                    description: 電圧
+                    example: 60
+                    nullable: true
+                  enableChargeHours:
+                    type: integer
+                    description: 最大充電可能時間
+                    example: 3
+                    nullable: true
+                  primaryWat:
+                    type: number
+                    description: 1次側電力値
+                    example: 200
+                    nullable: true
+                  primaryAt:
+                    type: string
+                    description: 1次側取得値
+                    example: '2023-01-05'
+                    nullable: true
+                required:
+                  - ownerId
+                  - customerNumber
+                  - ownerName
+                  - shopId
+                  - shopName
+                  - name
+                  - chargerType
+                  - chargerTypeName
+                  - isLimitrUnitPrice
+              examples:
+                Example 1:
+                  value:
+                    ownerId: 1
+                    customerNumber: CO00001
+                    ownerName: イオンモール
+                    shopId: 1
+                    shopName: イオンモール茨城
+                    name: Aグループ
+                    chargerInfo:
+                      - chargerId: 0
+                        chargerName: 1番、2番
+                    isLimitrUnitPrice: false
+                    chargerType: 1
+                    chargerTypeName: 急速
+                    demandType: 1
+                    controlCurrent: 60
+                    voltage: 60
+                    enableChargeHours: 3
+                    primaryWat: 200
+                    primaryAt: '2023-01-05'
+                Example 2:
+                  value:
+                    ownerId: 2
+                    customerNumber: CO00002
+                    ownerName: イオンモール
+                    shopId: 2
+                    shopName: イオンモール茨城
+                    name: Bグループ
+                    chargerInfo:
+                      - chargerId: 1
+                        chargerName: 1番、2番
+                    chargerType: 2
+                    chargerTypeName: 普通
+                    isLimitrUnitPrice: true
+                    lowerUnitPrice: 20
+                    upperUnitPrice: 80
+                    demandType: 1
+                    controlCurrent: 60
+                    voltage: 200
+                    enableChargeHours: 3
+                    primaryWat: 73
+                    primaryAt: '2023-01-05'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-chargers-groups-group-id
+      description: |
+        【利用場面】
+    put:
+      summary: チャージャグループ更新
+      tags:
+        - Charger-Group
+        - PH2.0
+      operationId: put-chargers-groups-group-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |
+        【利用場面】
+      requestBody:
+        $ref: '#/components/requestBodies/ChargerGroup'
+    delete:
+      summary: チャージャグループ削除
+      tags:
+        - Charger-Group
+        - PH1.5
+      operationId: delete-chargers-groups-group-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items: {}
+              examples:
+                Example 1:
+                  value: {}
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |
+        チャージャグループを削除する
+
+        【利用場面】
   /api/user:
     get:
       summary: 認証テスト
@@ -18090,9 +19644,442 @@ components:
                 transferAccountTypeName: 当座
                 transferBank: りそな銀行
                 transferBankBranch: 梅田支店
-
-
-
+    PlStatementItem:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              groupCode:
+                type: integer
+                description: カテゴリ
+                example: 1
+                minimum: 0
+              itemName:
+                type: string
+                example: EVチャージャ-充電代
+                minLength: 1
+                maxLength: 20
+                description: 項目名
+              unitPrice:
+                type: number
+                example: 40
+                minimum: 0
+                nullable: true
+                description: 単価
+              unit:
+                type: string
+                nullable: true
+                example: 台
+                minLength: 0
+                maxLength: 10
+                description: 単位
+              note:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 100
+                description: 備考
+              taxType:
+                type: integer
+                description: 税区分
+                example: 0
+            required:
+              - groupCode
+              - itemName
+              - taxType
+    ChargerGroup:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownerId:
+                type: integer
+                description: オーナーID
+                example: 1
+                minimum: 1
+              shopId:
+                type: integer
+                description: 店舗ID
+                example: 1
+                minimum: 1
+              name:
+                type: string
+                example: Aグループ
+                minLength: 1
+                maxLength: 20
+                description: グループ名
+              chargerType:
+                type: integer
+                example: 1
+                minimum: 1
+                description: 充電タイプ
+              isLimitrUnitPrice:
+                type: boolean
+                example: true
+                description: 通常料金制限フラグ
+              lowerUnitPrice:
+                type: integer
+                example: 40
+                description: 通常料金下限単価
+                nullable: true
+              upperUnitPrice:
+                type: integer
+                example: 40
+                description: 通常料金_上限単価
+                nullable: true
+              demandType:
+                type: integer
+                example: 0
+                description: デマンドタイプ
+              controlCurrent:
+                type: number
+                example: 60
+                description: 制御電流
+                nullable: true
+              voltage:
+                type: number
+                example: 200
+                description: 電圧
+                nullable: true
+              enableChargeHours:
+                type: integer
+                example: 4
+                description: 最大充電可能時間
+                nullable: true
+              chargerInfo:
+                type: array
+                description: チャージャ情報
+                items:
+                  type: object
+                  nullable: true
+                  properties:
+                    chargerId:
+                      type: integer
+                      example: 2
+                      description: チャージャID
+            required:
+              - ownerId
+              - name
+              - chargerType
+              - isLimitrUnitPrice
+              - demandType
+              - chargerInfo
+          examples:
+            Example 1:
+              value:
+                ownerId: 1
+                Id: 1
+                name: Aグループ
+                chargerType: 1
+                isLimitrUnitPrice: true
+                lowerUnitPrice: 40
+                upperUnitPrice: 40
+                demandType: 0
+                controlCurrent: 60
+                voltage: 200
+                enableChargeHours: 4
+                chargerInfo:
+                  - chargerId: 2
+                  - chargerId: 4
+      description: ''
+    PlStatement:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownerId:
+                type: integer
+                description: オーナーID
+                example: 1
+              postNumber:
+                type: integer
+                description: 郵便番号
+                example: 1234567
+                minimum: 1
+                maximum: 9999999
+              addrRegion:
+                type: string
+                description: 都道府県
+                minLength: 1
+                maxLength: 5
+                example: 大阪府
+              addr1:
+                type: string
+                description: 住所１
+                minLength: 1
+                maxLength: 30
+                example: 茨木市
+              addr2:
+                type: string
+                nullable: true
+                description: 住所２
+                minLength: 0
+                maxLength: 30
+                example: 松か本町8-30
+              reportName:
+                type: string
+                nullable: true
+                description: 帳票宛先名
+                minLength: 0
+                maxLength: 60
+                example: イオンモール茨城 中居太郎
+              honorific:
+                type: string
+                nullable: true
+                description: 敬称
+                minLength: 0
+                maxLength: 5
+                example: 様
+              targetYM:
+                type: string
+                description: 対象年月
+                minLength: 7
+                maxLength: 7
+                example: 2023-06
+              note:
+                type: string
+                nullable: true
+                description: 備考
+                minLength: 0
+                maxLength: 255
+                example: 帳票備考
+              prepaidAmount:
+                type: integer
+                description: 預り金
+                example: 100000
+              unpaidAmount:
+                type: integer
+                description: 未払金
+                example: 100000
+              totalAmountWithoutTax:
+                type: integer
+                description: 合計金額（税別）
+                example: 1200000
+              totalAmountOfTax:
+                type: integer
+                description: 消費税額
+                example: 100000
+              taxRate:
+                type: integer
+                description: 消費税率
+                example: 10
+              totalAmountOfReducedTax:
+                type: integer
+                description: 軽減税額
+                example: 160000
+              reducedTaxRate:
+                type: integer
+                description: 軽減税率
+                example: 8
+              paymentDueDate:
+                type: string
+                nullable: true
+                pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+                description: 支払い期日
+                example: '2023-01-31'
+              paymentOptionCode:
+                type: integer
+                nullable: true
+                description: 支払方法コード
+                example: null
+              senderShopId:
+                type: integer
+                description: 差出店舗ID
+                example: 1
+              reportStatemets:
+                type: array
+                description: 明細書詳細
+                items:
+                  type: object
+                  properties:
+                    shopId:
+                      type: integer
+                      description: 店舗ID
+                      example: 20
+                    details:
+                      type: array
+                      description: 明細書詳細情報
+                      items:
+                        type: object
+                        properties:
+                          category:
+                            type: integer
+                            description: カテゴリ
+                            example: 1
+                          itemName:
+                            type: string
+                            description: 品名
+                            minLength: 1
+                            maxLength: 30
+                            example: 6Kw-通常時間
+                          quantity:
+                            type: number
+                            nullable: true
+                            format: float
+                            description: 数量
+                            example: 10000
+                          unit:
+                            type: string
+                            nullable: true
+                            description: 単位
+                            minLength: 0
+                            maxLength: 10
+                            example: 分
+                          taxType:
+                            type: integer
+                            description: 税区分
+                            example: 0
+                          unitPrice:
+                            type: number
+                            nullable: true
+                            format: float
+                            description: 単価
+                            example: 60
+                          amount:
+                            type: integer
+                            description: 金額
+                            example: 100
+                          note:
+                            type: string
+                            nullable: true
+                            description: 備考
+                            minLength: 0
+                            maxLength: 50
+                            example: null
+                          isAuto:
+                            type: boolean
+                            description: 自動フラグ
+                            example: false
+                        required:
+                          - category
+                          - itemName
+                          - taxType
+                          - amount
+                          - isAuto
+                  required:
+                    - shopId
+            required:
+              - ownerId
+              - postNumber
+              - addrRegion
+              - addr1
+              - targetYM
+              - prepaidAmount
+              - unpaidAmount
+              - totalAmountWithoutTax
+              - totalAmountOfTax
+              - taxRate
+              - totalAmountOfReducedTax
+              - reducedTaxRate
+              - senderShopId
+          examples:
+            Example-登録時:
+              value:
+                ownerId: 1
+                postNumber: 1234567
+                addrRegion: 大阪府
+                addr1: 茨木市
+                addr2: 松か本町8-30
+                reportName: イオンモール茨城 中居太郎
+                honorific: 様
+                targetYM: 2023-06
+                note: 帳票備考
+                prepaidAmount: 100000
+                unpaidAmount: 100000
+                totalAmountWithoutTax: 1200000
+                totalAmountOfTax: 100000
+                taxRate: 10
+                totalAmountOfReducedTax: 160000
+                reducedTaxRate: 8
+                paymentDueDate: '2023-01-31'
+                paymentOptionCode: null
+                senderShopId: 1
+                reportStatemets:
+                  - shopId: 1
+                    details:
+                      - category: 1
+                        itemName: 6Kw-通常時間
+                        quantity: 10000
+                        unit: 分
+                        taxType: 0
+                        unitPrice: 60
+                        amount: 100
+                        note: null
+                        isAuto: false
+                      - category: 1
+                        itemName: 3Kw-軽減税
+                        quantity: 5000
+                        unit: 分
+                        taxType: 1
+                        unitPrice: 40
+                        amount: 200000
+                        note: null
+                        isAuto: false
+            Example-編集時:
+              value:
+                ownerId: 1
+                postNumber: 1234567
+                addrRegion: 大阪府
+                addr1: 茨木市
+                addr2: 松か本町8-30
+                reportName: イオンモール茨城 中居太郎
+                honorific: 様
+                targetYM: 2023-06
+                note: 帳票備考
+                prepaidAmount: 100000
+                unpaidAmount: 100000
+                totalAmountWithoutTax: 1200000
+                totalAmountOfTax: 100000
+                taxRate: 10
+                totalAmountOfReducedTax: 160000
+                reducedTaxRate: 8
+                paymentDueDate: '2023-01-31'
+                paymentOptionCode: null
+                senderShopId: 1
+                reportStatemets:
+                  - shopId: 1
+                    details:
+                      - category: 1
+                        itemName: 6Kw-通常時間
+                        quantity: 10000
+                        unit: 分
+                        taxType: 0
+                        unitPrice: 60
+                        amount: 600000
+                        note: 自動作成
+                        isAuto: true
+                      - category: 1
+                        itemName: 3Kw-通常時間
+                        quantity: 20000
+                        unit: 分
+                        taxType: 2
+                        unitPrice: 60
+                        amount: 100
+                        note: 自動作成
+                        isAuto: false
+                  - shopId: 2
+                    details:
+                      - category: 1
+                        itemName: 6Kw-通常時間
+                        quantity: 500
+                        unit: 分
+                        taxType: 0
+                        unitPrice: 60
+                        amount: 3000
+                        note: 自動作成
+                        isAuto: true
+                      - category: 1
+                        itemName: 3Kw-通常時間
+                        quantity: 20000
+                        unit: 分
+                        taxType: 2
+                        unitPrice: 60
+                        amount: 100
+                        note: 自動作成
+                        isAuto: false
 tags:
   - name: System
     description: システムに関する API 群です
@@ -18138,8 +20125,8 @@ tags:
     description: オーナーの利用メンバに関する API 群です
   - name: PL-Statement
     description: 明細書に関する API 群です
-  - name: Cost-Item
-    description: マスタ費用項目に関する API 群です
+  - name: PL-Statement-Item
+    description: 明細項目マスタに関する API 群です
   - name: Spot-Charge
     description: 即時充電に関する API 群です
   - name: Electric-Power
