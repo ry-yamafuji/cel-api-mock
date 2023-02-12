@@ -17140,6 +17140,299 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       operationId: get-api-owners-ownerId-shops
+  '/api/owners/{ownerId}/shops/{shopId}':
+    parameters:
+      - schema:
+          type: string
+        name: ownerId
+        in: path
+        required: true
+        description: ログイン時に保持しているオーナーID
+      - schema:
+          type: string
+        name: shopId
+        in: path
+        required: true
+        description: ログイン時に保持している店舗ID
+    get:
+      summary: オーナー店舗詳細
+      tags:
+        - Owner
+        - PH1.5
+      operationId: get-api-owners-owner-id-shops-shop-id
+      description: |-
+        オーナー情報の詳細を取得する
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471575510
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shopName:
+                    type: string
+                    description: 店舗名
+                    example: イオンモール茨城
+                  postNumber:
+                    type: string
+                    description: 郵便番号
+                    example: 〒567-0033
+                    nullable: true
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪府
+                    nullable: true
+                  addr1:
+                    type: string
+                    description: 住所1
+                    example: 茨木市松本町8-30
+                    nullable: true
+                  addr2:
+                    type: string
+                    description: 住所2
+                    example: null
+                    nullable: true
+                  phoneNumber:
+                    type: string
+                    description: 電話番号
+                    example: 090-1234-5678
+                    nullable: true
+                  faxNumber:
+                    type: string
+                    description: FAX番号
+                    example: 090-1234-5678
+                    nullable: true
+                  shopInfo:
+                    type: string
+                    description: 店舗情報
+                    example: 店舗情報
+                    nullable: true
+                  shopImageUrl:
+                    type: string
+                    description: 店舗画像
+                    example: 'http://localhost/storage/shops/img1.png'
+                    nullable: true
+                  isWorkWeekSun:
+                    type: boolean
+                    description: 営業_日_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekSunStartTime:
+                    type: string
+                    description: 営業_日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSunCloseTime:
+                    type: string
+                    description: 営業_日_終了時間
+                    example: '18:00:00'
+                    nullable: true
+                  isWorkWeekMon:
+                    type: boolean
+                    description: 営業_月_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekMonStartTime:
+                    type: string
+                    description: 営業_月_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekMonCloseTime:
+                    type: string
+                    description: 営業_月_終了時間
+                    example: '18:10:00'
+                    nullable: true
+                  isWorkWeekTue:
+                    type: boolean
+                    description: 営業_火_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekTueStartTime:
+                    type: string
+                    description: 営業_火_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekTueCloseTime:
+                    type: string
+                    description: 営業_火_終了時間
+                    example: '18:20:00'
+                    nullable: true
+                  isWorkWeekWed:
+                    type: boolean
+                    description: 営業_水_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekWedStartTime:
+                    type: string
+                    description: 営業_水_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekWedCloseTime:
+                    type: string
+                    description: 営業_水_終了時間
+                    example: '18:30:00'
+                    nullable: true
+                  isWorkWeekThu:
+                    type: boolean
+                    description: 営業_木_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekThuStartTime:
+                    type: string
+                    description: 営業_木_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekThuCloseTime:
+                    type: string
+                    description: 営業_木_終了時間
+                    example: '18:40:00'
+                    nullable: true
+                  isWorkWeekFri:
+                    type: boolean
+                    description: 営業_金_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekFriStartTime:
+                    type: string
+                    description: 営業_金_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekFriCloseTime:
+                    type: string
+                    description: 営業_金_終了時間
+                    example: '18:50:00'
+                    nullable: true
+                  isWorkWeekSat:
+                    type: boolean
+                    description: 営業_土_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekSatStartTime:
+                    type: string
+                    description: 営業_土_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSatCloseTime:
+                    type: string
+                    description: 営業_土_終了時間
+                    example: '19:00:00'
+                    nullable: true
+                  isWorkHoliday:
+                    type: boolean
+                    description: 営業_祝日_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekHolidayStartTime:
+                    type: string
+                    description: 営業_祝日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekHolidayCloseTime:
+                    type: string
+                    description: 営業_祝日_終了時間
+                    example: '19:00:00'
+                    nullable: true
+                required:
+                  - shopName
+              examples:
+                Example 1:
+                  value:
+                    shopName: イオンモール茨城
+                    postNumber: 〒567-0033
+                    addrRegion: 大阪府
+                    addr1: 茨木市松本町8-30
+                    addr2: null
+                    phoneNumber: 090-1234-5678
+                    faxNumber: 090-1234-5678
+                    shopInfo: 店舗情報
+                    shopImageUrl: 'http://localhost/storage/shops/img1.png'
+                    isWorkWeekSun: true
+                    weekSunStartTime: '09:00:00'
+                    weekSunCloseTime: '18:00:00'
+                    isWorkWeekMon: true
+                    weekMonStartTime: '09:00:00'
+                    weekMonCloseTime: '18:10:00'
+                    isWorkWeekTue: true
+                    weekTueStartTime: '09:00:00'
+                    weekTueCloseTime: '18:20:00'
+                    isWorkWeekWed: true
+                    weekWedStartTime: '09:00:00'
+                    weekWedCloseTime: '18:30:00'
+                    isWorkWeekThu: true
+                    weekThuStartTime: '09:00:00'
+                    weekThuCloseTime: '18:40:00'
+                    isWorkWeekFri: true
+                    weekFriStartTime: '09:00:00'
+                    weekFriCloseTime: '18:50:00'
+                    isWorkWeekSat: true
+                    weekSatStartTime: '09:00:00'
+                    weekSatCloseTime: '19:00:00'
+                    isWorkHoliday: true
+                    weekHolidayStartTime: '09:00:00'
+                    weekHolidayCloseTime: '19:00:00'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    put:
+      summary: オーナー店舗更新
+      operationId: put-api-owners-owner-id-shops-shop-id
+      tags:
+        - Owner-Shop
+        - PH1.5
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471441781
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        $ref: '#/components/requestBodies/OwnerShop'
   '/api/owners/{ownerId}/chargers':
     parameters:
       - schema:
@@ -17293,6 +17586,149 @@ paths:
           in: query
           name: limit
           description: 表示件数
+  '/api/owners/{ownerId}/chargers/{chargerId}':
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: ログイン時に保持しているオーナーID
+      - schema:
+          type: integer
+        name: chargerId
+        in: path
+        required: true
+        description: ログイン時に保持している店舗ID
+    get:
+      summary: オーナー店舗詳細
+      tags:
+        - Owner
+        - PH1.5
+      operationId: get-api-owners-owner-id-chargers-charger-id
+      description: |-
+        オーナー情報の詳細を取得する
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471575510
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isEnable:
+                    type: boolean
+                    description: 有効ステータス
+                    example: false
+                  shopName:
+                    type: string
+                    description: 店舗名
+                    example: イオンモール茨城
+                  chargerName:
+                    type: string
+                    description: チャージャ名
+                    example: 東1番口
+                  chargerToken:
+                    type: string
+                    description: チャージャトークン
+                    example: AbcdefGghf1543
+                  operationType:
+                    type: integer
+                    description: 運用タイプ
+                    example: 0
+                  note:
+                    type: string
+                    description: 備考
+                    example: 北側第一駐車場
+                    nullable: true
+                  groupName:
+                    type: string
+                    description: グループ名
+                    example: A
+                    nullable: true
+                  workStartDate:
+                    type: string
+                    description: 稼働開始日
+                    example: '2023-01-01'
+                    format: date
+                required:
+                  - shopName
+                  - chargerName
+                  - chargerToken
+                  - operationType
+                  - workStartDate
+              examples:
+                Example 1:
+                  value:
+                    isEnable: false
+                    shopName: イオンモール茨城
+                    chargerName: 東1番口
+                    chargerToken: AbcdefGghf1543
+                    operationType: 0
+                    note: 北側第一駐車場
+                    groupName: A
+                    workStartDate: '2023-01-01'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    put:
+      summary: オーナー店舗更新
+      operationId: put-api-owners-owner-id-chargers-charger-id
+      tags:
+        - Owner-Shop
+        - PH1.5
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471441781
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        $ref: '#/components/requestBodies/OwnerCharger'
   /api/owners/collation:
     post:
       summary: オーナー照合
@@ -20080,6 +20516,233 @@ components:
                         amount: 100
                         note: 自動作成
                         isAuto: false
+    OwnerShop:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              shopName:
+                type: string
+                description: 店舗名
+                example: イオンモール茨城
+                minLength: 0
+                maxLength: 20
+              postNumber:
+                type: integer
+                description: 郵便番号
+                example: 1234567
+                minimum: 1
+                maximum: 9999999
+                nullable: true
+              addrRegion:
+                type: string
+                description: 都道府県
+                example: 大阪府
+                minLength: 1
+                maxLength: 5
+                nullable: true
+              addr1:
+                type: string
+                description: 住所１
+                example: 茨木市
+                minLength: 1
+                maxLength: 30
+                nullable: true
+              addr2:
+                type: string
+                nullable: true
+                description: 住所２
+                example: 松が本町8-30
+                minLength: 0
+                maxLength: 30
+              phoneNumber:
+                type: string
+                description: 電話番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                nullable: true
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+              faxNumber:
+                type: string
+                description: FAX番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                nullable: true
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+              shopInfo:
+                type: string
+                description: 店舗情報
+                example: 店舗情報
+                minLength: 0
+                maxLength: 255
+                nullable: true
+              shopImageUrl:
+                type: string
+                description: 店舗画像
+                example: 'http://localhost/storage/shops/img1.png'
+                nullable: true
+              isWorkWeekSun:
+                type: boolean
+                description: 営業_日_稼働フラグ
+                example: true
+                nullable: true
+              weekSunStartTime:
+                type: string
+                description: 営業_日_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekSunCloseTime:
+                type: string
+                description: 営業_日_終了時間
+                example: '18:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekMon:
+                type: boolean
+                description: 営業_月_稼働フラグ
+                example: true
+                nullable: true
+              weekMonStartTime:
+                type: string
+                description: 営業_月_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekMonCloseTime:
+                type: string
+                description: 営業_月_終了時間
+                example: '18:10:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekTue:
+                type: boolean
+                description: 営業_火_稼働フラグ
+                example: true
+                nullable: true
+              weekTueStartTime:
+                type: string
+                description: 営業_火_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekTueCloseTime:
+                type: string
+                description: 営業_火_終了時間
+                example: '18:20:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekWed:
+                type: boolean
+                description: 営業_水_稼働フラグ
+                example: true
+                nullable: true
+              weekWedStartTime:
+                type: string
+                description: 営業_水_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekWedCloseTime:
+                type: string
+                description: 営業_水_終了時間
+                example: '18:30:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekThu:
+                type: boolean
+                description: 営業_木_稼働フラグ
+                example: true
+                nullable: true
+              weekThuStartTime:
+                type: string
+                description: 営業_木_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekThuCloseTime:
+                type: string
+                description: 営業_木_終了時間
+                example: '18:40:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekFri:
+                type: boolean
+                description: 営業_金_稼働フラグ
+                example: true
+                nullable: true
+              weekFriStartTime:
+                type: string
+                description: 営業_金_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekFriCloseTime:
+                type: string
+                description: 営業_金_終了時間
+                example: '18:50:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkWeekSat:
+                type: boolean
+                description: 営業_土_稼働フラグ
+                example: true
+                nullable: true
+              weekSatStartTime:
+                type: string
+                description: 営業_土_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekSatCloseTime:
+                type: string
+                description: 営業_土_終了時間
+                example: '19:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              isWorkHoliday:
+                type: boolean
+                description: 営業_祝日_稼働フラグ
+                example: true
+                nullable: true
+              weekHolidayStartTime:
+                type: string
+                description: 営業_祝日_開始時間
+                example: '09:00:00'
+                nullable: true
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+              weekHolidayCloseTime:
+                type: string
+                description: 営業_祝日_終了時間
+                example: '19:00:00'
+                nullable: true
+    OwnerCharger:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isEnable:
+                type: boolean
+                description: 有効ステータス
+                example: false
+              operationType:
+                type: integer
+                description: 運用タイプ
+                example: 0
+              note:
+                type: string
+                description: 備考
+                example: 北側第一駐車場
+                nullable: true
+                minLength: 0
+                maxLength: 50
+            required:
+              - isEnable
+              - operationType
 tags:
   - name: System
     description: システムに関する API 群です
