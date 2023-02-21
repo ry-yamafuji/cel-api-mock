@@ -17263,7 +17263,7 @@ paths:
       operationId: get-api-owners-ownerId-chargers
       summary: オーナーチャージャ一覧取得
       description: |-
-        オーナーのチャージャ一覧を取得する
+        オーナーのチャージャグループ一覧を取得する
         【利用場面】
 
         https://projects.invisionapp.com/d/main#/console/22228739/471786817/preview
@@ -17547,6 +17547,303 @@ paths:
                 $ref: '#/components/schemas/Error'
       requestBody:
         $ref: '#/components/requestBodies/OwnerCharger'
+  '/api/owners/{ownerId}/chargers/groups':
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: オーナーID
+    get:
+      summary: オーナーチャージャグループ一覧取得
+      tags:
+        - Charger-Group
+        - PH2.0
+      operationId: get-api-owners-ownerId-chargers-groups
+      description: |-
+        チャージャグループ一覧を取得する
+
+        【利用場面】
+        WAO.05.画面設計_チャージャグループ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                    minimum: 0
+                  list:
+                    description: チャージャグループ一覧
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: グループID
+                          example: 1
+                        shopName:
+                          type: string
+                          description: 店舗名
+                          example: イオンモール茨城
+                        name:
+                          type: string
+                          description: グループ名
+                          example: Aグループ
+                        chargerNum:
+                          type: integer
+                          description: 台数
+                          example: 5
+                        operationType:
+                          type: integer
+                          description: 運用タイプ
+                          example: 1
+                          nullable: true
+                        sharedFlg:
+                          type: boolean
+                          description: 共用フラグ
+                          example: false
+                        unitPrice:
+                          type: number
+                          description: 料金単価
+                          example: 50
+                          nullable: true
+                        nighttimeUnitPrice:
+                          type: number
+                          description: 深夜料金単価
+                          example: 25
+                          nullable: true
+                        guestUnitPrice:
+                          type: number
+                          description: 来客単価
+                          example: 40
+                          nullable: true
+                        enableChargeHours:
+                          type: integer
+                          description: 最大充電可能時間
+                          example: 3
+                          nullable: true
+                        controlCurrent:
+                          type: number
+                          description: 制御電流
+                          example: 60
+                          nullable: true
+                      required:
+                        - shopName
+                        - name
+                        - chargerNum
+                required:
+                  - dataCount
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+        - schema:
+            type: integer
+          in: query
+          name: searchCustomerNumber
+          description: 検索取引先番号
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: ページ
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 表示件数
+  '/api/owners/{ownerId}/chargers/groups/{groupId}':
+    parameters:
+      - schema:
+          type: integer
+        name: ownerId
+        in: path
+        required: true
+        description: ログイン時に保持しているオーナーID
+      - schema:
+          type: integer
+        name: groupId
+        in: path
+        required: true
+        description: ログイン時に保持しているグループID
+    get:
+      summary: オーナーチャージャグループ詳細
+      tags:
+        - Owner-Charger
+        - PH1.5
+      operationId: get-api-owners-owner-id-groups-group-id
+      description: |-
+        オーナー情報のチャージャグループ詳細を取得する
+
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471575510
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shopId:
+                    type: integer
+                    description: 店舗ID
+                    example: 1
+                  shopName:
+                    type: string
+                    description: 店舗名
+                    example: イオンモール茨城
+                  name:
+                    type: string
+                    description: グループ名
+                    example: Aグループ
+                  chargerInfo:
+                    type: array
+                    description: チャージャ情報
+                    items:
+                      type: object
+                      nullable: true
+                      properties:
+                        chargerName:
+                          type: string
+                          example: 1番、2番
+                  operationType:
+                    type: integer
+                    description: 運用タイプ
+                    example: 1
+                    nullable: true
+                  sharedFlg:
+                    type: boolean
+                    description: 共用フラグ
+                    example: false
+                  unitPrice:
+                    type: number
+                    description: 料金単価
+                    example: 50
+                    nullable: true
+                  nighttimeUnitPrice:
+                    type: number
+                    description: 深夜料金単価
+                    example: 25
+                    nullable: true
+                  guestUnitPrice:
+                    type: number
+                    description: 来客単価
+                    example: 40
+                    nullable: true
+                  enableChargeHours:
+                    type: integer
+                    description: 最大充電可能時間
+                    example: 3
+                    nullable: true
+                required:
+                  - shopId
+                  - shopName
+                  - name
+              examples:
+                Example 1:
+                  value:
+                    shopId: 1
+                    shopName: イオンモール茨城
+                    name: Aグループ
+                    chargerInfo:
+                      - chargerName: 1番、2番
+                    operationType: 1
+                    sharedFlg: false
+                    unitPrice: 50
+                    nighttimeUnitPrice: 25
+                    guestUnitPrice: 40
+                    enableChargeHours: 3
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+    put:
+      summary: オーナーチャージャグループ更新
+      operationId: put-api-owners-owner-id-groups-group-id
+      tags:
+        - Owner-Charger
+        - PH1.5
+      description: |-
+        【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471441781
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        $ref: '#/components/requestBodies/OwnerChargerGroup'
   /api/owners/collation:
     post:
       summary: オーナー照合
@@ -19235,6 +19532,11 @@ paths:
                           description: デマンドタイプ
                           example: 1
                           nullable: true
+                        enableChargeHours:
+                          type: integer
+                          description: 最大充電可能時間
+                          example: 3
+                          nullable: true
                         controlCurrent:
                           type: number
                           description: 制御電流
@@ -20573,6 +20875,34 @@ components:
             required:
               - isEnable
               - operationType
+    OwnerChargerGroup:
+      description: オーナーチャージャグループ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              enableChargeHours:
+                type: integer
+                example: 4
+                description: 最大充電可能時間
+                nullable: true
+              unitPrice:
+                type: number
+                description: 料金単価
+                example: 50
+              nighttimeUnitPrice:
+                type: number
+                description: 深夜料金単価
+                example: 25
+                nullable: true
+              guestUnitPrice:
+                type: number
+                description: 来客単価
+                example: 40
+                nullable: true
+            required:
+              - unitPrice
 tags:
   - name: System
     description: システムに関する API 群です
