@@ -17558,7 +17558,7 @@ paths:
     get:
       summary: オーナーチャージャグループ一覧取得
       tags:
-        - Charger-Group
+        - Owner-Charger-Group
         - PH2.0
       operationId: get-api-owners-ownerId-chargers-groups
       description: |-
@@ -17672,11 +17672,6 @@ paths:
         - schema:
             type: integer
           in: query
-          name: searchCustomerNumber
-          description: 検索取引先番号
-        - schema:
-            type: integer
-          in: query
           name: page
           description: ページ
         - schema:
@@ -17701,7 +17696,7 @@ paths:
     get:
       summary: オーナーチャージャグループ詳細
       tags:
-        - Owner-Charger
+        - Owner-Charger-Group
         - PH1.5
       operationId: get-api-owners-owner-id-groups-group-id
       description: |-
@@ -17809,7 +17804,7 @@ paths:
       summary: オーナーチャージャグループ更新
       operationId: put-api-owners-owner-id-groups-group-id
       tags:
-        - Owner-Charger
+        - Owner-Charger-Group
         - PH1.5
       description: |-
         【利用場面】
@@ -20887,19 +20882,27 @@ components:
                 example: 4
                 description: 最大充電可能時間
                 nullable: true
+                minimum: 0
+                maximum: 99
               unitPrice:
                 type: number
                 description: 料金単価
                 example: 50
+                minimum: 0
+                maximum: 999
               nighttimeUnitPrice:
                 type: number
                 description: 深夜料金単価
                 example: 25
                 nullable: true
+                minimum: 0
+                maximum: 999
               guestUnitPrice:
                 type: number
                 description: 来客単価
                 example: 40
+                minimum: 0
+                maximum: 999
                 nullable: true
             required:
               - unitPrice
@@ -20942,6 +20945,8 @@ tags:
     description: オーナーの店舗に関する API 群です
   - name: Owner-Charger
     description: オーナーの充電器に関する API 群です
+  - name: Owner-Charger-Group
+    description: オーナーのチャージャグループに関する API 群です
   - name: Owner-User
     description: オーナーのアプリユーザーに関する API 群です
   - name: Owner-Available-Member
