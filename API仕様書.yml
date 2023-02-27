@@ -5323,11 +5323,16 @@ paths:
                 example-1(ステーション):
                   value:
                     list:
-                      - id: 1
+                      - id: 2
                         name: 茨木本店
                         category: 1
-                        openTime: '08:30:00Z'
-                        closeTime: '19:30:00Z'
+                        openTime: '08:30:00'
+                        closeTime: '19:30:00'
+                      - id: 3
+                        name: 神戸支店
+                        category: 1
+                        openTime: '08:00:00'
+                        closeTime: '19:00:00'
                 example-2(すべて):
                   value:
                     list:
