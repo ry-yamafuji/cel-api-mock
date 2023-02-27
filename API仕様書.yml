@@ -6948,6 +6948,302 @@ paths:
           name: searchDate
           description: 対象日を指定
           required: true
+  '/api/shops/{shopId}/chargers/types/status':
+    get:
+      summary: チャージャタイプ別ステータス情報取得
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        chargeType:
+                          type: number
+                          example: 1
+                          description: 充電タイプ
+                        chargeTypeStr:
+                          type: string
+                          description: 充電タイプ名
+                          example: 急速
+                        chargerOutlet:
+                          type: string
+                          example: CHAdeMO
+                          description: 差込口タイプ
+                        chargerOutput:
+                          type: string
+                          description: 充電出力名
+                          example: 最大50Kw
+                        chargerUnitPrice:
+                          type: integer
+                          description: 充電料金単価
+                          example: 50
+                        chargerImagUrl:
+                          type: string
+                          example: 'http://example.com/image.png'
+                          description: 充電画像URL
+                        chargersCount:
+                          type: integer
+                          description: 台数
+                          example: 4
+                        chargersBlankCount:
+                          type: integer
+                          description: 空き台数
+                        disableFlg:
+                          type: boolean
+                          description: 予約使用不可フラグ
+                  paymentFlg:
+                    type: boolean
+                    description: 支払可能フラグ
+                  status:
+                    type: integer
+                    description: 'ステータス(0:予約なし 1:予約中 2:充電中 3:低速充電中 4:エラー)'
+                    example: 2
+                  reservesInfo:
+                    type: object
+                    description: 予約情報
+                    nullable: true
+                    properties:
+                      reservesId:
+                        type: integer
+                        example: 12
+                        description: 予約ID
+                      startAt:
+                        type: string
+                        format: date-time
+                        description: 予約開始日時
+                      endAt:
+                        type: string
+                        format: date-time
+                        description: 予約終了日時
+                      shopId:
+                        type: integer
+                        example: 1
+                        description: 店舗ID
+                      shopStr:
+                        type: string
+                        description: 店舗名
+                        example: 茨木本店
+                      connectorId:
+                        type: integer
+                        description: コネクタID
+                        example: 4
+                      connectorName:
+                        type: string
+                        example: 4番
+                        description: コネクタ名
+                      chargingTime:
+                        type: string
+                        description: 経過時間
+                        example: '00:32:00'
+                        nullable: true
+                      chargingPrice:
+                        type: integer
+                        description: 経過料金
+                        example: 5432
+                        nullable: true
+                      chargingStatus:
+                        type: integer
+                        description: 充電量
+                        example: 50
+                        nullable: true
+              examples:
+                Example-予約なし:
+                  value:
+                    list:
+                      - chargeType: 1
+                        chargeTypeStr: 急速
+                        chargerUnitPrice: 50
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 最大50kW
+                      - chargeType: 2
+                        chargeTypeStr: 普通
+                        chargerUnitPrice: 30
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargersCount: 1
+                        chargersBlankCount: 1
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 6kW
+                    paymentFlg: true
+                    status: 0
+                    reservesInfo: null
+                Example-エラー:
+                  value:
+                    list:
+                      - chargeType: 1
+                        chargeTypeStr: 急速
+                        chargerUnitPrice: 50
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 最大50kW
+                      - chargeType: 2
+                        chargeTypeStr: 普通
+                        chargerUnitPrice: 30
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 100/200 V
+                    paymentFlg: true
+                    status: 4
+                    reservesInfo:
+                      reservesId: 3
+                      startAt: '2023-02-15 07:40:00'
+                      endAt: '2023-02-15 08:40:00'
+                      shopId: 4
+                      shopStr: テスト支店
+                      connectorId: 8
+                      connectorName: S2
+                      chargingTime: null
+                      chargingPrice: null
+                      chargingStatus: null
+                Example-予約中:
+                  value:
+                    list:
+                      - chargeType: 1
+                        chargeTypeStr: 急速
+                        chargerUnitPrice: 50
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 最大50kW
+                      - chargeType: 2
+                        chargeTypeStr: 普通
+                        chargerUnitPrice: 30
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 100/200 V
+                    paymentFlg: true
+                    status: 1
+                    reservesInfo:
+                      reservesId: 3
+                      startAt: '2023-02-15 07:40:00'
+                      endAt: '2023-02-15 08:40:00'
+                      shopId: 4
+                      shopStr: テスト支店
+                      connectorId: 8
+                      connectorName: S2
+                      chargingTime: null
+                      chargingPrice: null
+                      chargingStatus: null
+                Example-充電中:
+                  value:
+                    list:
+                      - chargeType: 1
+                        chargeTypeStr: 急速
+                        chargerUnitPrice: 50
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 最大50kW
+                      - chargeType: 2
+                        chargeTypeStr: 普通
+                        chargerUnitPrice: 30
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 100/200 V
+                    paymentFlg: true
+                    status: 2
+                    reservesInfo:
+                      reservesId: 3
+                      startAt: '2023-02-15 07:40:00'
+                      endAt: '2023-02-15 08:40:00'
+                      shopId: 4
+                      shopStr: テスト支店
+                      connectorId: 8
+                      connectorName: S2
+                      chargingTime: '00:50:00'
+                      chargingPrice: 2000
+                      chargingStatus: 74
+                Example-制御中:
+                  value:
+                    list:
+                      - chargeType: 1
+                        chargeTypeStr: 急速
+                        chargerUnitPrice: 50
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 最大50kW
+                      - chargeType: 2
+                        chargeTypeStr: 普通
+                        chargerUnitPrice: 30
+                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargersCount: 2
+                        chargersBlankCount: 2
+                        disableFlg: true
+                        chargerOutlet: CHAdeMO
+                        chargerOutput: 100/200 V
+                    paymentFlg: true
+                    status: 3
+                    reservesInfo:
+                      reservesId: 3
+                      startAt: '2023-02-15 07:40:00'
+                      endAt: '2023-02-15 08:40:00'
+                      shopId: 4
+                      shopStr: テスト支店
+                      connectorId: 8
+                      connectorName: S2
+                      chargingTime: '00:50:00'
+                      chargingPrice: 2000
+                      chargingStatus: 95
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      operationId: get-shops-shopId-chargers-types-status
+      description: |
+        現在のチャージャーをタイプ別に表示する(タイプ別集計)
+
+        【利用画面】
+
+        会員アプリ-充電TOP画面
+
+        https://projects.invisionapp.com/share/9H12C9ZXURW8#/screens/463854251
+      tags:
+        - MEMBERS-APP
+        - PH1.0
+        - Reserve
+        - PH1.5
+      security:
+        - MEMBER-TOKEN: []
+    parameters:
+      - schema:
+          type: string
+        name: shopId
+        in: path
+        required: true
   '/api/shops/{shopId}/chargers/types/{chargerType}':
     get:
       summary: チャージャータイプ別情報取得
@@ -7315,302 +7611,6 @@ paths:
           required: true
       security:
         - MEMBER-TOKEN: []
-  '/api/shops/{shopId}/chargers/types/status':
-    get:
-      summary: チャージャタイプ別ステータス情報取得
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  list:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        chargeType:
-                          type: number
-                          example: 1
-                          description: 充電タイプ
-                        chargeTypeStr:
-                          type: string
-                          description: 充電タイプ名
-                          example: 急速
-                        chargerOutlet:
-                          type: string
-                          example: CHAdeMO
-                          description: 差込口タイプ
-                        chargerOutput:
-                          type: string
-                          description: 充電出力名
-                          example: 最大50Kw
-                        chargerUnitPrice:
-                          type: integer
-                          description: 充電料金単価
-                          example: 50
-                        chargerImagUrl:
-                          type: string
-                          example: 'http://example.com/image.png'
-                          description: 充電画像URL
-                        chargersCount:
-                          type: integer
-                          description: 台数
-                          example: 4
-                        chargersBlankCount:
-                          type: integer
-                          description: 空き台数
-                        disableFlg:
-                          type: boolean
-                          description: 予約使用不可フラグ
-                  paymentFlg:
-                    type: boolean
-                    description: 支払可能フラグ
-                  status:
-                    type: integer
-                    description: 'ステータス(0:予約なし 1:予約中 2:充電中 3:低速充電中 4:エラー)'
-                    example: 2
-                  reservesInfo:
-                    type: object
-                    description: 予約情報
-                    nullable: true
-                    properties:
-                      reservesId:
-                        type: integer
-                        example: 12
-                        description: 予約ID
-                      startAt:
-                        type: string
-                        format: date-time
-                        description: 予約開始日時
-                      endAt:
-                        type: string
-                        format: date-time
-                        description: 予約終了日時
-                      shopId:
-                        type: integer
-                        example: 1
-                        description: 店舗ID
-                      shopStr:
-                        type: string
-                        description: 店舗名
-                        example: 茨木本店
-                      connectorId:
-                        type: integer
-                        description: コネクタID
-                        example: 4
-                      connectorName:
-                        type: string
-                        example: 4番
-                        description: コネクタ名
-                      chargingTime:
-                        type: string
-                        description: 経過時間
-                        example: '00:32:00'
-                        nullable: true
-                      chargingPrice:
-                        type: integer
-                        description: 経過料金
-                        example: 5432
-                        nullable: true
-                      chargingStatus:
-                        type: integer
-                        description: 充電量
-                        example: 50
-                        nullable: true
-              examples:
-                Example-予約なし:
-                  value:
-                    list:
-                      - chargeType: 1
-                        chargeTypeStr: 急速
-                        chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 最大50kW
-                      - chargeType: 2
-                        chargeTypeStr: 普通
-                        chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 1
-                        chargersBlankCount: 1
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 6kW
-                    paymentFlg: true
-                    status: 0
-                    reservesInfo: null
-                Example-エラー:
-                  value:
-                    list:
-                      - chargeType: 1
-                        chargeTypeStr: 急速
-                        chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 最大50kW
-                      - chargeType: 2
-                        chargeTypeStr: 普通
-                        chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 100/200 V
-                    paymentFlg: true
-                    status: 4
-                    reservesInfo:
-                      reservesId: 3
-                      startAt: '2023-02-15 07:40:00'
-                      endAt: '2023-02-15 08:40:00'
-                      shopId: 4
-                      shopStr: テスト支店
-                      connectorId: 8
-                      connectorName: S2
-                      chargingTime: null
-                      chargingPrice: null
-                      chargingStatus: null
-                Example-予約中:
-                  value:
-                    list:
-                      - chargeType: 1
-                        chargeTypeStr: 急速
-                        chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 最大50kW
-                      - chargeType: 2
-                        chargeTypeStr: 普通
-                        chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 100/200 V
-                    paymentFlg: true
-                    status: 1
-                    reservesInfo:
-                      reservesId: 3
-                      startAt: '2023-02-15 07:40:00'
-                      endAt: '2023-02-15 08:40:00'
-                      shopId: 4
-                      shopStr: テスト支店
-                      connectorId: 8
-                      connectorName: S2
-                      chargingTime: null
-                      chargingPrice: null
-                      chargingStatus: null
-                Example-充電中:
-                  value:
-                    list:
-                      - chargeType: 1
-                        chargeTypeStr: 急速
-                        chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 最大50kW
-                      - chargeType: 2
-                        chargeTypeStr: 普通
-                        chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 100/200 V
-                    paymentFlg: true
-                    status: 2
-                    reservesInfo:
-                      reservesId: 3
-                      startAt: '2023-02-15 07:40:00'
-                      endAt: '2023-02-15 08:40:00'
-                      shopId: 4
-                      shopStr: テスト支店
-                      connectorId: 8
-                      connectorName: S2
-                      chargingTime: '00:50:00'
-                      chargingPrice: 2000
-                      chargingStatus: 74
-                Example-制御中:
-                  value:
-                    list:
-                      - chargeType: 1
-                        chargeTypeStr: 急速
-                        chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 最大50kW
-                      - chargeType: 2
-                        chargeTypeStr: 普通
-                        chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: true
-                        chargerOutlet: CHAdeMO
-                        chargerOutput: 100/200 V
-                    paymentFlg: true
-                    status: 3
-                    reservesInfo:
-                      reservesId: 3
-                      startAt: '2023-02-15 07:40:00'
-                      endAt: '2023-02-15 08:40:00'
-                      shopId: 4
-                      shopStr: テスト支店
-                      connectorId: 8
-                      connectorName: S2
-                      chargingTime: '00:50:00'
-                      chargingPrice: 2000
-                      chargingStatus: 95
-        '201':
-          description: Created
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-      operationId: get-shops-shopId-chargers-types-status
-      description: |
-        現在のチャージャーをタイプ別に表示する(タイプ別集計)
-
-        【利用画面】
-
-        会員アプリ-充電TOP画面
-
-        https://projects.invisionapp.com/share/9H12C9ZXURW8#/screens/463854251
-      tags:
-        - MEMBERS-APP
-        - PH1.0
-        - Reserve
-        - PH1.5
-      security:
-        - MEMBER-TOKEN: []
-    parameters:
-      - schema:
-          type: string
-        name: shopId
-        in: path
-        required: true
   '/api/shops/{shopId}/chargers/status':
     get:
       summary: チャージャーステータス情報取得
