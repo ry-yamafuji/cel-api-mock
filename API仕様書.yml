@@ -19954,7 +19954,7 @@ servers:
   - description: AWS
     url: 'https://webapp.cleanenergylabo.jp'
   - description: WEBモック
-    url: 'https://stoplight.io/mocks/ns-creates/cel-prj/64147355'
+    url: 'https://stoplight.io/mocks/cel-prj/cel-api-mock/134334104'
 components:
   securitySchemes:
     MEMBER-TOKEN:
