@@ -7430,18 +7430,18 @@ paths:
                         chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
-                        disableFlg: false
+                        disableFlg: true
                         chargerOutlet: CHAdeMO
                         chargerOutput: 最大50kW
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
                         chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
-                        chargersCount: 2
-                        chargersBlankCount: 2
-                        disableFlg: false
+                        chargersCount: 1
+                        chargersBlankCount: 1
+                        disableFlg: true
                         chargerOutlet: CHAdeMO
-                        chargerOutput: 100/200 V
+                        chargerOutput: 6kW
                     paymentFlg: true
                     status: 0
                     reservesInfo: null
