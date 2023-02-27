@@ -7320,12 +7320,12 @@ paths:
         - MEMBER-TOKEN: []
     parameters:
       - schema:
-          type: string
+          type: integer
         name: shopId
         in: path
         required: true
       - schema:
-          type: string
+          type: integer
         name: chargerType
         in: path
         required: true
