@@ -6373,6 +6373,105 @@ paths:
         name: shopId
         in: path
         required: true
+  '/api/shops/{shopId}/chargers/types/{chargerType}':
+    get:
+      summary: チャージャータイプ別情報取得
+      tags:
+        - Reserve
+        - MEMBERS-APP
+        - PH1.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chargerOutlet:
+                    type: string
+                    example: CHAdeMO
+                    description: 差込口タイプ
+                  chargerType:
+                    type: number
+                    description: 充電タイプ
+                    example: 1
+                  chargerTypeStr:
+                    type: string
+                    example: 急速
+                    description: 充電タイプ名
+                  chargerOutput:
+                    type: string
+                    description: 充電出力名
+                    example: 最大50Kw
+                  chargerUnitPrice:
+                    type: integer
+                    example: 50
+                    description: 充電料金単価
+                  chargerImagUrl:
+                    type: string
+                    example: 'http://example.com/image.png'
+                    description: チャージャ画像URL
+                  shopId:
+                    type: integer
+                    description: 店舗ID
+                    example: 1
+                  shopName:
+                    type: string
+                    description: 店舗名
+                    example: 茨木本店
+              examples:
+                example-1:
+                  value:
+                    chargerOutlet: CHAdeMO
+                    chargerType: 1
+                    chargerTypeStr: 急速
+                    chargerOutput: 最大50kW
+                    chargerUnitPrice: 50
+                    chargerImagUrl: charger/default1.png
+                    shopId: 2
+                    shopName: 茨木本店
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      operationId: get-shops-shopId-chargers-types-charger-charger-type
+      description: |
+        チャージャーのタイプ別を取得する
+
+        【利用画面】
+
+        会員アプリ-充電 カレンダーの日付取得_チャージャのステータスを取得する
+
+        https://projects.invisionapp.com/share/9H12C9ZXURW8#/screens/464222536
+
+        【サーバー処理】
+
+        * 店舗、充電タイプによりチャージャーTをグループ化し取得する
+
+          * 結合条件
+            *  チャージャT.充電タイプ = 区分マスタT(充電タイプ).値1
+            *  チャージャT.店舗ID =店舗T.店舗ID
+          * グループ化
+            * 店舗ID、店舗名、充電タイプ、充電タイプ名、充電名、充電出力、差込口タイプ、充電料金単価、チャージャ画像URL、
+          * 抽出条件
+            *  チャージャT.充電タイプ = パラメータの充電タイプ
+            *  チャージャT.店舗ID = パラメータの店舗ID
+      security:
+        - MEMBER-TOKEN: []
+    parameters:
+      - schema:
+          type: string
+        name: shopId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: chargerType
+        in: path
+        required: true
   '/api/shops/{shopId}/calendar':
     parameters:
       - schema:
