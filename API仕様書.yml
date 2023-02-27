@@ -21,8 +21,6 @@ paths:
       summary: 利用規約更新
       operationId: put-api-sys-info-service-terms-serviceTermsId
       tags:
-        - System
-        - PH1.0
         - ADMINS-APP
       responses:
         '200':
