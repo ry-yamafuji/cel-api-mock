@@ -405,13 +405,13 @@ paths:
                         body: クリーンエナジーラボが選択した団体へ寄付されます。
                         url: null
                         contact: null
-                        imageUrl: 'http://localhost/storage/donations/img1.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img1.png'
                       - id: 2
                         name: WWF
                         body: WWFは100か国以上で活動している環境保全団体で、1961年にスイスで設立されました。人と自然が調和して生きられる未来を目指して、サステナブルな社会の実現を押しすすてめています
                         url: 'http://example.com'
                         contact: 06-XXXX-XXXX
-                        imageUrl: 'http://localhost/storage/donations/img2.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img2.png'
                 test:
                   value:
                     list:
@@ -420,13 +420,13 @@ paths:
                         body: クリーンエナジーラボが選択した団体へ寄付されます。
                         url: null
                         contact: null
-                        imageUrl: 'http://localhost/storage/donations/img1.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img1.png'
                       - id: 2
                         name: WWF
                         body: WWFは100か国以上で活動している環境保全団体で、1961年にスイスで設立されました。人と自然が調和して生きられる未来を目指して、サステナブルな社会の実現を押しすすてめています
                         url: 'http://example.com'
                         contact: 06-XXXX-XXXX
-                        imageUrl: 'http://localhost/storage/donations/img2.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img2.png'
         '500':
           description: Internal Server Error
       operationId: get-api-sys-mst-donations
@@ -3754,7 +3754,7 @@ paths:
                     linkUrl: string
                 test:
                   value:
-                    linkUrl: 'http://localhost/payments/notices/error?pgno=2'
+                    linkUrl: 'https://webapp.cleanenergylabo.jp/payments/notices/error?pgno=2'
       description: |-
         会員決済URL情報を取得する
 
@@ -7046,7 +7046,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: false
@@ -7055,7 +7055,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: false
@@ -7070,7 +7070,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7079,7 +7079,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7104,7 +7104,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7113,7 +7113,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7138,7 +7138,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7147,7 +7147,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7172,7 +7172,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7181,7 +7181,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7668,7 +7668,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: null
                         reservesInfo: []
@@ -7679,7 +7679,7 @@ paths:
                         chargerTypeName: 普通
                         chargerOutput: 100/200 V
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default2.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7699,7 +7699,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7719,7 +7719,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 2
                         windowStatus: null
                         reservesInfo:
@@ -7739,7 +7739,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: null
                         reservesInfo:
@@ -7759,7 +7759,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_CONTROL
                         reservesInfo:
@@ -7779,7 +7779,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_UNLOCK
                         reservesInfo:
@@ -7799,7 +7799,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_FINISH
                         reservesInfo:
@@ -7819,7 +7819,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGER_ERROR
                         reservesInfo:
@@ -7839,7 +7839,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: CHARGER_MAINTENANCE
                         reservesInfo: []
@@ -7853,7 +7853,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: null
                         reservesInfo: []
@@ -7864,7 +7864,7 @@ paths:
                         chargerTypeName: 普通
                         chargerOutput: 100/200 V
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default2.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7884,7 +7884,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7904,7 +7904,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 2
                         windowStatus: null
                         reservesInfo:
@@ -7924,7 +7924,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: null
                         reservesInfo:
@@ -7944,7 +7944,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_CONTROL
                         reservesInfo:
@@ -7964,7 +7964,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_UNLOCK
                         reservesInfo:
@@ -7984,7 +7984,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_FINISH
                         reservesInfo:
@@ -8004,7 +8004,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGER_ERROR
                         reservesInfo:
@@ -8024,7 +8024,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: CHARGER_MAINTENANCE
                         reservesInfo: []
@@ -10766,7 +10766,7 @@ paths:
                     chargeTypeName: 急速
                     chargerOutlet: CHAdeMO
                     chargeOutput: 100/200 V
-                    chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                    chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                     chargerUnitPrice: 40
                     expectChargerTime: 30
                     expectChargePrice: 1200
@@ -14063,7 +14063,7 @@ paths:
                     code: 1
                     title: 珈琲半額クーポン
                     body: 店内にて無料プレゼント
-                    imageUrl: 'http://localhost/storage/coupons/img1.png'
+                    imageUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img1.png'
                     note: 対象店舗でのみご利用いただけます。事前にご確認ください
                     shopId: 0
                     shopName: null
@@ -14096,7 +14096,7 @@ paths:
                     code: 1
                     title: 珈琲半額クーポン
                     body: 店内にて無料プレゼント
-                    imageUrl: 'http://localhost/storage/coupons/img1.png'
+                    imageUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img1.png'
                     note: 対象店舗でのみご利用いただけます。事前にご確認ください
                     shopId: 0
                     shopName: null
@@ -16923,7 +16923,7 @@ paths:
                   shopImageUrl:
                     type: string
                     description: 店舗画像
-                    example: 'http://localhost/storage/shops/img1.png'
+                    example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                     nullable: true
                   isWorkWeekSun:
                     type: boolean
@@ -17058,7 +17058,7 @@ paths:
                     phoneNumber: 090-1234-5678
                     faxNumber: 090-1234-5678
                     shopInfo: 店舗情報
-                    shopImageUrl: 'http://localhost/storage/shops/img1.png'
+                    shopImageUrl: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                     isWorkWeekSun: true
                     weekSunStartTime: '09:00:00'
                     weekSunCloseTime: '18:00:00'
@@ -20195,7 +20195,7 @@ paths:
       security:
         - MEMBER-TOKEN: []
 servers:
-  - url: 'http://localhost'
+  - url: 'https://webapp.cleanenergylabo.jp'
   - description: AWS
     url: 'https://webapp.cleanenergylabo.jp'
   - description: WEBモック
@@ -20954,7 +20954,7 @@ components:
               shopImageUrl:
                 type: string
                 description: 店舗画像
-                example: 'http://localhost/storage/shops/img1.png'
+                example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                 nullable: true
               isWorkWeekSun:
                 type: boolean
