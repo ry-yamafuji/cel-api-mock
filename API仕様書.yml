@@ -22,6 +22,8 @@ paths:
       operationId: put-api-sys-info-service-terms-serviceTermsId
       tags:
         - ADMINS-APP
+        - PH1.0
+        - System
       responses:
         '200':
           description: OK
@@ -3227,7 +3229,7 @@ paths:
                         couponCode: 1
                         couponTitle: 珈琲半額クーポン
                         couponBody: 店内にて無料プレゼント
-                        couponImgUrl: /images/coupon/0001.png
+                        couponImgUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img1.png'
                         useShopId: null
                         useShopStr: null
                         useAt: null
@@ -3238,7 +3240,7 @@ paths:
                         couponCode: 2
                         couponTitle: ドリンク半額クーポン
                         couponBody: 店内にて無料プレゼント
-                        couponImgUrl: /images/coupon/0002.png
+                        couponImgUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img2.png'
                         useShopId: null
                         useShopStr: null
                         useAt: null
