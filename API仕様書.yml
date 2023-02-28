@@ -3246,31 +3246,6 @@ paths:
                         useAt: null
                         giveAt: '2022-07-31 00:00:00'
                         validTo: '2022-09-01'
-                test:
-                  value:
-                    list:
-                      - id: 1
-                        couponId: 1
-                        couponCode: 1
-                        couponTitle: 珈琲半額クーポン
-                        couponBody: 店内にて無料プレゼント
-                        couponImgUrl: /images/coupon/0001.png
-                        useShopId: null
-                        useShopStr: null
-                        useAt: null
-                        giveAt: '2022-08-21 00:00:00'
-                        validTo: '2022-10-01'
-                      - id: 13
-                        couponId: 2
-                        couponCode: 2
-                        couponTitle: ドリンク半額クーポン
-                        couponBody: 店内にて無料プレゼント
-                        couponImgUrl: /images/coupon/0002.png
-                        useShopId: null
-                        useShopStr: null
-                        useAt: null
-                        giveAt: '2022-07-31 00:00:00'
-                        validTo: '2022-09-01'
         '401':
           description: Unauthorized
         '403':
