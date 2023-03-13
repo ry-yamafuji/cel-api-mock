@@ -405,13 +405,13 @@ paths:
                         body: クリーンエナジーラボが選択した団体へ寄付されます。
                         url: null
                         contact: null
-                        imageUrl: 'http://localhost/storage/donations/img1.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img1.png'
                       - id: 2
                         name: WWF
                         body: WWFは100か国以上で活動している環境保全団体で、1961年にスイスで設立されました。人と自然が調和して生きられる未来を目指して、サステナブルな社会の実現を押しすすてめています
                         url: 'http://example.com'
                         contact: 06-XXXX-XXXX
-                        imageUrl: 'http://localhost/storage/donations/img2.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img2.png'
                 test:
                   value:
                     list:
@@ -420,13 +420,13 @@ paths:
                         body: クリーンエナジーラボが選択した団体へ寄付されます。
                         url: null
                         contact: null
-                        imageUrl: 'http://localhost/storage/donations/img1.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img1.png'
                       - id: 2
                         name: WWF
                         body: WWFは100か国以上で活動している環境保全団体で、1961年にスイスで設立されました。人と自然が調和して生きられる未来を目指して、サステナブルな社会の実現を押しすすてめています
                         url: 'http://example.com'
                         contact: 06-XXXX-XXXX
-                        imageUrl: 'http://localhost/storage/donations/img2.png'
+                        imageUrl: 'https://webapp.cleanenergylabo.jp/storage/donations/img2.png'
         '500':
           description: Internal Server Error
       operationId: get-api-sys-mst-donations
@@ -1970,7 +1970,7 @@ paths:
                   value:
                     memberId: 1
                     name: スマホ太郎
-                    barcodeToken: OVsxaXd0RKO
+                    barcodeToken: RJQKNECIWBY
                     mailAddr: devel@exsmple.com
                     addrRegion: 大阪府
                     addr: 大阪市大阪町大阪1丁目１－１
@@ -5352,14 +5352,99 @@ paths:
           in: query
           name: category
           description: '1:ステーション、2:本部 0:全体'
-    post:
-      summary: 店舗情報登録
-      operationId: api-post-shops
+    parameters: []
+  /api/sys/mst/shops/owners:
+    get:
+      summary: 店舗マスタ(オーナー)一覧取得
       tags:
-        - Shop
+        - ADMINS-APP
         - PH1.0
         - PH1.5
+        - Shop
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 店舗
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 店舗ID                            
+                          example: 1
+                        customerNumber:
+                          type: string
+                          description: 取引先番号
+                          example: CO00001
+                        ownerName:
+                          type: string
+                          description: 取引先名
+                          example: イオンモール
+                        name:
+                          type: string
+                          description: 店舗名
+                          example: イオンモール茨木
+                        phoneNumber:
+                          type: string
+                          description: 電話番号
+                          example: 090-1234-5436
+              examples:
+                example-1:
+                  value:
+                    list:
+                      - id: 5
+                        customerNumber: CO00001
+                        ownerName: イオンモール
+                        name: イオンモール茨木
+                        phoneNumber: 000-1234-5436
+                      - id: 6
+                        customerNumber: CO00001
+                        ownerName: イオンモール
+                        name: イオンモール森口
+                        phoneNumber: 000-1234-5436
+                      - id: 7
+                        customerNumber: CO00002
+                        ownerName: タイムズ
+                        name: タイムズ吹田
+                        phoneNumber: 000-1234-5436
+                      - id: 8
+                        customerNumber: CO00003
+                        ownerName: オーナーテスト
+                        name: テストO支店
+                        phoneNumber: 000-1234-5436
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      operationId: api-get-sys-mst-shops-owners
+      description: |
+        店舗マスタ(オーナー)一覧を取得する
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: キーワード
+      security:
+        - MEMBER-TOKEN: []
+    parameters: []
+    post:
+      summary: 店舗マスタ(オーナー)登録
+      operationId: post-api-sys-mst-shops-owners
+      tags:
         - ADMINS-APP
+        - PH1.0
+        - PH1.5
+        - Shop
       responses:
         '200':
           description: OK
@@ -5368,168 +5453,312 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        $ref: '#/components/requestBodies/ShopOwner'
+      description: 店舗マスタ(オーナー)情報を登録する
+      security:
+        - MEMBER-TOKEN: []
+  '/api/sys/mst/shops/{shopId}/owners':
+    get:
+      summary: 店舗マスタ(オーナー)詳細
+      tags:
+        - Shop
+        - PH1.0
+        - PH1.5
+        - ADMINS-APP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  status:
-                    type: integer
-                  msg:
+                  name:
                     type: string
-                x-examples:
-                  example-1:
-                    status: 400
-                    msg: メッセージ
+                    description: 店舗名
+                    example: 本店
+                  ownerId:
+                    type: integer
+                    description: オーナーID
+                    example: 1
+                  customerNumber:
+                    type: string
+                    description: 取引先番号
+                    example: CO00001
+                  ownerName:
+                    type: string
+                    description: 取引先名
+                    example: イオンモール
+                  postNumber:
+                    type: string
+                    description: 郵便番号
+                    example: 〒583-0001
+                    nullable: true
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪府
+                    nullable: true
+                  addr1:
+                    type: string
+                    description: 住所1
+                    example: 茨木市駅前一丁目１番１号
+                    nullable: true
+                  addr2:
+                    type: string
+                    description: 住所2
+                    example: null
+                    nullable: true
+                  phoneNumber:
+                    type: string
+                    description: 電話番号
+                    example: 090-1234-5678
+                    nullable: true
+                  faxNumber:
+                    type: string
+                    description: FAX番号
+                    example: 090-1234-5678
+                    nullable: true
+                  shopInfo:
+                    type: string
+                    description: 店舗情報
+                    example: 店舗情報
+                    nullable: true
+                  shopImageUrl:
+                    type: string
+                    description: 店舗画像
+                    example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
+                    nullable: true
+                  isWorkWeekSun:
+                    type: boolean
+                    description: 営業_日_稼働フラグ
+                    example: true
+                  weekSunStartTime:
+                    type: string
+                    description: 営業_日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSunCloseTime:
+                    type: string
+                    description: 営業_日_終了時間
+                    example: '18:00:00'
+                    nullable: true
+                  isWorkWeekMon:
+                    type: boolean
+                    description: 営業_月_稼働フラグ
+                    example: true
+                  weekMonStartTime:
+                    type: string
+                    description: 営業_月_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekMonCloseTime:
+                    type: string
+                    description: 営業_月_終了時間
+                    example: '18:10:00'
+                    nullable: true
+                  isWorkWeekTue:
+                    type: boolean
+                    description: 営業_火_稼働フラグ
+                    example: true
+                  weekTueStartTime:
+                    type: string
+                    description: 営業_火_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekTueCloseTime:
+                    type: string
+                    description: 営業_火_終了時間
+                    example: '18:20:00'
+                  isWorkWeekWed:
+                    type: boolean
+                    description: 営業_水_稼働フラグ
+                    example: true
+                  weekWedStartTime:
+                    type: string
+                    description: 営業_水_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekWedCloseTime:
+                    type: string
+                    description: 営業_水_終了時間
+                    example: '18:30:00'
+                    nullable: true
+                  isWorkWeekThu:
+                    type: boolean
+                    description: 営業_木_稼働フラグ
+                    example: true
+                  weekThuStartTime:
+                    type: string
+                    description: 営業_木_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekThuCloseTime:
+                    type: string
+                    description: 営業_木_終了時間
+                    example: '18:40:00'
+                    nullable: true
+                  isWorkWeekFri:
+                    type: boolean
+                    description: 営業_金_稼働フラグ
+                    example: true
+                  weekFriStartTime:
+                    type: string
+                    description: 営業_金_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekFriCloseTime:
+                    type: string
+                    description: 営業_金_終了時間
+                    example: '18:50:00'
+                    nullable: true
+                  isWorkWeekSat:
+                    type: boolean
+                    description: 営業_土_稼働フラグ
+                    example: true
+                  weekSatStartTime:
+                    type: string
+                    description: 営業_土_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSatCloseTime:
+                    type: string
+                    description: 営業_土_終了時間
+                    example: '19:00:00'
+                    nullable: true
+                  isWorkHoliday:
+                    type: boolean
+                    description: 営業_祝日_稼働フラグ
+                    example: true
+                  holidayStartTime:
+                    type: string
+                    description: 営業_祝日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  holidayCloseTime:
+                    type: string
+                    description: 営業_祝日_終了時間
+                    example: '19:00:00'
+                    nullable: true
               examples:
                 example-1:
                   value:
-                    status: 400
-                    msg: メッセージ
+                    name: イオンモール森口
+                    ownerId: 1
+                    customerNumber: CO00001
+                    ownerName: イオンモール
+                    postNumber: 〒583-0001
+                    addrRegion: 大阪府
+                    addr1: 森口市泉町一丁目1番1号
+                    addr2: null
+                    phoneNumber: 000-1234-5436
+                    faxNumber: 000-1234-5436
+                    shopInfo: null
+                    shopImageUrl: null
+                    isWorkWeekSun: true
+                    weekSunStartTime: '08:00:00'
+                    weekSunCloseTime: '19:00:00'
+                    isWorkWeekMon: true
+                    weekMonStartTime: '08:00:00'
+                    weekMonCloseTime: '19:00:00'
+                    isWorkWeekTue: true
+                    weekTueStartTime: '08:00:00'
+                    weekTueCloseTime: '19:00:00'
+                    isWorkWeekWed: false
+                    weekWedStartTime: null
+                    weekWedCloseTime: null
+                    isWorkWeekThu: true
+                    weekThuStartTime: '08:00:00'
+                    weekThuCloseTime: '19:00:00'
+                    isWorkWeekFri: true
+                    weekFriStartTime: '08:00:00'
+                    weekFriCloseTime: '19:00:00'
+                    isWorkWeekSat: true
+                    weekSatStartTime: '08:00:00'
+                    weekSatCloseTime: '19:00:00'
+                    isWorkHoliday: true
+                    holidayStartTime: '08:00:00'
+                    holidayCloseTime: '19:00:00'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '500':
           description: Internal Server Error
+      operationId: api-get-shops-shopId
       description: |
-        店舗情報を登録する
-
-        【利用場面】
-
-        管理アプリ_マスタメンテ_店舗一覧
-
-        画面設計書「WAM10.画面設計_マスタ_店舗_一覧画面」を参照
-
-        ■ 入力チェック仕様
-
-        <table>
-          <tr>
-            <th>No</th>
-            <th>条件</th>
-            <th>メッセージ</th>
-            <th>アプリ/API</th>
-          </tr>
-          <tr>
-            <td>1</td><td>店舗コード、店舗名が空白の場合</td>
-            <td>○○[項目名]を入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>2</td><td>種別が空白の場合</td>
-            <td>○○[項目名]を選択してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>3</td><td>店舗コードが重複の場合</td>
-            <td>店舗コードが重複しています</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>4</td><td>店舗コードが英数字以外の場合</td>
-            <td>店舗コードは英数字で入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>5</td><td>店舗電話番号、店舗FAX番号が英数字以外の場合</td>
-            <td>電話番号[FAX番号]は英数字で入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>6</td><td>店舗コード、店舗名、住所、電話番号、FAX番号の<br>いずれかの文字数が超過の場合</td>
-            <td>○○[項目名]は○○文字以内で入力してください ※スキーマを参照</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>7</td><td>営業開始時間 > 営業終了時間 </td>
-            <td>営業終了時間は開始時間より以降を選択してください</td>
-            <td>アプリ/API</td>
-          </tr>
-        </table>
-
-        <hr>
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: string
-                  description: |-
-                    店舗コード
-
-                    店舗T
-                  example: S001
-                  maxLength: 5
-                category:
-                  type: integer
-                  description: |-
-                    店舗種別
-                    1:ステーション 2:管理本部
-
-                    店舗T
-                  example: 1
-                name:
-                  type: string
-                  description: |-
-                    店舗名
-
-                    店舗T
-                  example: 茨木本店
-                  maxLength: 20
-                addr:
-                  type: string
-                  description: |-
-                    住所
-
-                    店舗T
-                  maxLength: 100
-                  example: 大阪府○○○○○○
-                phoneNumber:
-                  type: string
-                  description: |-
-                    店舗電話番号
-
-                    店舗T
-                  example: 06-XXXX-XXXX
-                  maxLength: 15
-                faxNumber:
-                  type: string
-                  description: 店舗FAX番号
-                  example: 06-XXXX-XXXX
-                  maxLength: 15
-                openTime:
-                  type: string
-                  description: 営業開始時間
-                  format: time
-                  example: '08:00:00Z'
-                closeTime:
-                  type: string
-                  description: 営業終了時間
-                  format: time
-                  example: '19:00:00Z'
-              required:
-                - code
-                - category
-                - name
-                - addr
-                - phoneNumber
-                - faxNumber
-            examples:
-              example-1:
-                value:
-                  code: S001
-                  category: 1
-                  name: 茨木本店
-                  addr: 大阪府○○○○○○
-                  phoneNumber: 06-XXXX-XXXX
-                  faxNumber: 06-XXXX-XXXX
-                  openTime: '08:00:00Z'
-                  closeTime: '19:00:00Z'
+        店舗マスタ(オーナー)情報を取得する
       security:
         - MEMBER-TOKEN: []
-    parameters: []
+    parameters:
+      - schema:
+          type: integer
+        name: shopId
+        in: path
+        required: true
+    put:
+      summary: 店舗マスタ(オーナー)更新
+      operationId: api-put-shops-shopId
+      tags:
+        - ADMINS-APP
+        - PH1.5
+        - Shop
+      description: |
+        店舗マスタ(ステーション・管理本部)情報を更新する
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        $ref: '#/components/requestBodies/ShopOwner'
+      security:
+        - MEMBER-TOKEN: []
   /api/sys/mst/shops:
     get:
-      summary: 店舗一覧取得-マスタメンテ
+      summary: 店舗マスタ(ステーション・管理本部)一覧取得
       tags:
         - Shop
         - PH1.0
@@ -5555,13 +5784,6 @@ paths:
 
                             店舗T
                           example: 1
-                        code:
-                          type: string
-                          description: |-
-                            店舗コード
-
-                            店舗T
-                          example: S001
                         name:
                           type: string
                           description: |-
@@ -5584,22 +5806,6 @@ paths:
 
                             店舗T
                           example: 1
-                        openTime:
-                          type: string
-                          description: |-
-                            営業開始時間
-
-                            店舗T
-                          format: time
-                          nullable: true
-                        closeTime:
-                          type: string
-                          description: |-
-                            営業終了時間
-
-                            店舗T
-                          format: time
-                          nullable: true
                         shopManager:
                           type: integer
                           example: 1
@@ -5632,64 +5838,33 @@ paths:
                         name: 本社
                         phoneNumber: 000-1234-5436
                         category: 2
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
                         staffTotal: null
                         shopManager: null
                         shopManagerName: null
                       - id: 2
                         code: S01
                         name: 茨木本店
-                        phoneNumber: 0770-1234-5436
-                        category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                        staffTotal: 2
-                        shopManager: 4
-                        shopManagerName: 店舗太郎
-                      - id: 3
-                        code: S02
-                        name: 神戸支店
-                        phoneNumber: 0780-1234-5436
-                        category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                        staffTotal: null
-                        shopManager: null
-                        shopManagerName: null
-                test:
-                  value:
-                    list:
-                      - id: 1
-                        code: M01
-                        name: 本社
                         phoneNumber: 000-1234-5436
-                        category: 2
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                        staffTotal: null
-                        shopManager: null
-                        shopManagerName: null
-                      - id: 2
-                        code: S01
-                        name: 茨木本店
-                        phoneNumber: 0770-1234-5436
                         category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
-                        staffTotal: 2
-                        shopManager: 4
-                        shopManagerName: 店舗太郎
+                        staffTotal: 1
+                        shopManager: 3
+                        shopManagerName: 店舗管理者
                       - id: 3
                         code: S02
                         name: 神戸支店
-                        phoneNumber: 0780-1234-5436
+                        phoneNumber: 000-1234-5436
                         category: 1
-                        openTime: '08:00:00'
-                        closeTime: '19:00:00'
                         staffTotal: null
                         shopManager: null
                         shopManagerName: null
+                      - id: 4
+                        code: S03
+                        name: テスト支店
+                        phoneNumber: 000-1234-5436
+                        category: 1
+                        staffTotal: 2
+                        shopManager: 7
+                        shopManagerName: UATユーザー04
         '401':
           description: Unauthorized
         '403':
@@ -5731,8 +5906,51 @@ paths:
           in: query
           name: category
           description: '1:ステーション、2:本部'
+      security:
+        - MEMBER-TOKEN: []
     parameters: []
-  '/api/shops/{shopId}':
+    post:
+      summary: 店舗マスタ(ステーション・管理本部)登録
+      operationId: post-api-sys-mst-shops
+      tags:
+        - Shop
+        - PH1.0
+        - PH1.5
+        - ADMINS-APP
+      description: |
+        店舗マスタ(ステーション・管理本部)情報を登録する
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        $ref: '#/components/requestBodies/Shop'
+      security:
+        - MEMBER-TOKEN: []
+  '/api/sys/mst/shops/{shopId}':
     get:
       summary: 店舗情報詳細取得
       tags:
@@ -5748,13 +5966,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: |-
-                      店舗ID
-
-                      店舗T
-                    example: 1
                   code:
                     type: string
                     description: 店舗コード
@@ -5768,67 +5979,220 @@ paths:
                   name:
                     type: string
                     description: 店舗名
-                    example: 茨木本店
-                  addr:
+                    example: 本店
+                  postNumber:
                     type: string
-                    description: 住所
-                    example: 大阪府○○○○○○
+                    description: 郵便番号
+                    example: 〒583-0001
+                    nullable: true
+                  addrRegion:
+                    type: string
+                    description: 都道府県
+                    example: 大阪府
+                    nullable: true
+                  addr1:
+                    type: string
+                    description: 住所1
+                    example: 茨木市駅前一丁目１番１号
+                    nullable: true
+                  addr2:
+                    type: string
+                    description: 住所2
+                    example: null
+                    nullable: true
                   phoneNumber:
                     type: string
-                    description: 店舗電話番号
-                    example: 06-XXXX-XXXX
+                    description: 電話番号
+                    example: 090-1234-5678
+                    nullable: true
                   faxNumber:
                     type: string
-                    description: 店舗FAX番号
-                    example: 06-XXXX-XXXX
-                  openTime:
-                    type: string
-                    description: 営業開始時間
-                    format: time
-                    example: '08:00:00Z'
+                    description: FAX番号
+                    example: 090-1234-5678
                     nullable: true
-                  closeTime:
+                  shopInfo:
                     type: string
-                    description: 営業終了時間
-                    format: time
-                    example: '19:00:00Z'
+                    description: 店舗情報
+                    example: 店舗情報
+                    nullable: true
+                  shopImageUrl:
+                    type: string
+                    description: 店舗画像
+                    example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
+                    nullable: true
+                  isWorkWeekSun:
+                    type: boolean
+                    description: 営業_日_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekSunStartTime:
+                    type: string
+                    description: 営業_日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSunCloseTime:
+                    type: string
+                    description: 営業_日_終了時間
+                    example: '18:00:00'
+                    nullable: true
+                  isWorkWeekMon:
+                    type: boolean
+                    description: 営業_月_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekMonStartTime:
+                    type: string
+                    description: 営業_月_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekMonCloseTime:
+                    type: string
+                    description: 営業_月_終了時間
+                    example: '18:10:00'
+                    nullable: true
+                  isWorkWeekTue:
+                    type: boolean
+                    description: 営業_火_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekTueStartTime:
+                    type: string
+                    description: 営業_火_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekTueCloseTime:
+                    type: string
+                    description: 営業_火_終了時間
+                    example: '18:20:00'
+                    nullable: true
+                  isWorkWeekWed:
+                    type: boolean
+                    description: 営業_水_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekWedStartTime:
+                    type: string
+                    description: 営業_水_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekWedCloseTime:
+                    type: string
+                    description: 営業_水_終了時間
+                    example: '18:30:00'
+                    nullable: true
+                  isWorkWeekThu:
+                    type: boolean
+                    description: 営業_木_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekThuStartTime:
+                    type: string
+                    description: 営業_木_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekThuCloseTime:
+                    type: string
+                    description: 営業_木_終了時間
+                    example: '18:40:00'
+                    nullable: true
+                  isWorkWeekFri:
+                    type: boolean
+                    description: 営業_金_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekFriStartTime:
+                    type: string
+                    description: 営業_金_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekFriCloseTime:
+                    type: string
+                    description: 営業_金_終了時間
+                    example: '18:50:00'
+                    nullable: true
+                  isWorkWeekSat:
+                    type: boolean
+                    description: 営業_土_稼働フラグ
+                    example: true
+                    nullable: true
+                  weekSatStartTime:
+                    type: string
+                    description: 営業_土_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  weekSatCloseTime:
+                    type: string
+                    description: 営業_土_終了時間
+                    example: '19:00:00'
+                    nullable: true
+                  isWorkHoliday:
+                    type: boolean
+                    description: 営業_祝日_稼働フラグ
+                    example: true
+                    nullable: true
+                  holidayStartTime:
+                    type: string
+                    description: 営業_祝日_開始時間
+                    example: '09:00:00'
+                    nullable: true
+                  holidayCloseTime:
+                    type: string
+                    description: 営業_祝日_終了時間
+                    example: '19:00:00'
                     nullable: true
               examples:
-                example-1:
+                Example 1:
                   value:
-                    id: 2
-                    code: S01
+                    code: S001
                     category: 1
-                    name: 茨木本店
-                    addr: 大阪府大阪市大阪町２－２
-                    phoneNumber: 0770-1234-5436
-                    faxNumber: 0770-1234-5436
-                    openTime: '08:00:00'
-                    closeTime: '19:00:00'
-                test:
-                  value:
-                    id: 2
-                    code: S01
-                    category: 1
-                    name: 茨木本店
-                    addr: 大阪府大阪市大阪町２－２
-                    phoneNumber: 0770-1234-5436
-                    faxNumber: 0770-1234-5436
-                    openTime: '08:00:00'
-                    closeTime: '19:00:00'
+                    name: 本店
+                    postNumber: 〒583-0001
+                    addrRegion: 大阪府
+                    addr1: 茨木市駅前一丁目１番１号
+                    addr2: null
+                    phoneNumber: 090-1234-5678
+                    faxNumber: 090-1234-5678
+                    shopInfo: 店舗情報
+                    shopImageUrl: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
+                    isWorkWeekSun: true
+                    weekSunStartTime: '09:00:00'
+                    weekSunCloseTime: '18:00:00'
+                    isWorkWeekMon: true
+                    weekMonStartTime: '09:00:00'
+                    weekMonCloseTime: '18:10:00'
+                    isWorkWeekTue: true
+                    weekTueStartTime: '09:00:00'
+                    weekTueCloseTime: '18:20:00'
+                    isWorkWeekWed: true
+                    weekWedStartTime: '09:00:00'
+                    weekWedCloseTime: '18:30:00'
+                    isWorkWeekThu: true
+                    weekThuStartTime: '09:00:00'
+                    weekThuCloseTime: '18:40:00'
+                    isWorkWeekFri: true
+                    weekFriStartTime: '09:00:00'
+                    weekFriCloseTime: '18:50:00'
+                    isWorkWeekSat: true
+                    weekSatStartTime: '09:00:00'
+                    weekSatCloseTime: '19:00:00'
+                    isWorkHoliday: false
+                    holidayStartTime: null
+                    holidayCloseTime: null
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '500':
           description: Internal Server Error
-      operationId: api-get-shops-shopId
+      operationId: get-api-sys-mst-shops-shop-id
       description: |-
         店舗情報の詳細を取得する
 
         【利用場面】
 
         画面設計書「WAM10.画面設計_マスタ_店舗_一覧画面」を参照
+      security:
+        - MEMBER-TOKEN: []
     parameters:
       - schema:
           type: integer
@@ -5836,173 +6200,15 @@ paths:
         in: path
         required: true
     put:
-      summary: 店舗情報更新
-      operationId: api-put-shops-shopId
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                  msg:
-                    type: string
-                x-examples:
-                  example-1:
-                    status: 400
-                    msg: メッセージ
-              examples:
-                example-1:
-                  value:
-                    status: 400
-                    msg: メッセージ
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-      description: |
-        店舗情報を更新する
-
-        【利用場面】
-
-        管理アプリ_マスタメンテ_店舗一覧
-
-        画面設計書「WAM10.画面設計_マスタ_店舗_一覧画面」を参照
-
-        <hr>
-
-        ■ 入力チェック仕様
-
-        <table>
-          <tr>
-            <th>No</th>
-            <th>条件</th>
-            <th>メッセージ</th>
-            <th>アプリ/API</th>
-          </tr>
-          <tr>
-            <td>1</td><td>店舗コード、店舗名が空白の場合</td>
-            <td>○○[項目名]を入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>2</td><td>種別が空白の場合</td>
-            <td>○○[項目名]を選択してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>3</td><td>店舗コードが重複の場合</td>
-            <td>店舗コードが重複しています</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>4</td><td>店舗コードが英数字以外の場合</td>
-            <td>店舗コードは英数字で入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>5</td><td>店舗電話番号、店舗FAX番号が英数字以外の場合</td>
-            <td>電話番号[FAX番号]は英数字で入力してください</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>6</td><td>店舗コード、店舗名、住所、電話番号、FAX番号の<br>いずれかの文字数が超過の場合</td>
-            <td>○○[項目名]は○○文字以内で入力してください ※スキーマを参照</td>
-            <td>アプリ/API</td>
-          </tr>
-          <tr>
-            <td>7</td><td>営業開始時間 > 営業終了時間 </td>
-            <td>営業終了時間は開始時間より以降を選択してください</td>
-            <td>アプリ/API</td>
-          </tr>
-        </table>
-
-        <hr>
+      summary: 店舗マスタ(ステーション・管理本部)更新
+      operationId: put-api-sys-mst-shops-shop-id
       tags:
         - Shop
         - PH1.0
         - PH1.5
         - ADMINS-APP
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: string
-                  description: |-
-                    店舗コード
-
-                    店舗T
-                  example: S001
-                  maxLength: 5
-                category:
-                  type: integer
-                  description: |-
-                    店舗種別
-                    1:ステーション 2:管理本部
-
-                    店舗T
-                  example: 1
-                name:
-                  type: string
-                  description: |-
-                    店舗名
-
-                    店舗T
-                  example: 茨木本店
-                  maxLength: 20
-                addr:
-                  type: string
-                  description: |-
-                    住所
-
-                    店舗T
-                  maxLength: 100
-                  example: 大阪府○○○○○○
-                phoneNumber:
-                  type: string
-                  description: |-
-                    店舗電話番号
-
-                    店舗T
-                  example: 06-XXXX-XXXX
-                  maxLength: 15
-                faxNumber:
-                  type: string
-                  description: |-
-                    店舗FAX番号
-
-                    店舗T
-                  example: 06-XXXX-XXXX
-                  maxLength: 15
-                openTime:
-                  type: string
-                  description: |-
-                    営業開始時間
-
-                    店舗T
-                  format: time
-                  example: '08:00:00Z'
-                closeTime:
-                  type: string
-                  description: |-
-                    営業終了時間
-
-                    店舗T
-                  format: time
-                  example: '19:00:00Z'
-    delete:
-      summary: 店舗情報削除
-      operationId: api-delete-shops-shopId
+      description: |
+        店舗マスタ(ステーション・管理本部)情報を更新する
       responses:
         '200':
           description: OK
@@ -6011,58 +6217,62 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                  msg:
-                    type: string
-                x-examples:
-                  example-1:
-                    status: 400
-                    msg: メッセージ
-              examples:
-                example-1:
-                  value:
-                    status: 400
-                    msg: メッセージ
+                $ref: '#/components/schemas/Error'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
         '500':
           description: Internal Server Error
-      description: |-
-        店舗を削除する
-
-        ・チャージャーが登録されていると削除できない
-
-        【利用場面】
-
-        管理アプリ_マスタメンテ_店舗一覧
-
-        画面設計書「WAM10.画面設計_マスタ_店舗_一覧画面」を参照
-
-        <hr>
-
-        ### ■ エラーチェック仕様
-
-        <table>
-          <tr>
-            <th>No</th>
-            <th>条件</th>
-            <th>メッセージ</th>
-            <th>アプリ/API</th>
-          </tr>
-          <tr>
-            <td>1</td><td>チャージャーが登録されている場合</td>
-            <td>チャージャが登録されています。チャージャを先に削除してください</td>
-            <td>アプリ/API</td>
-          </tr>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      requestBody:
+        $ref: '#/components/requestBodies/Shop'
+      security:
+        - MEMBER-TOKEN: []
+    delete:
+      summary: 店舗マスタ削除
+      operationId: delete-api-sys-mst-shops-shop-id
       tags:
         - Shop
         - PH1.0
+        - PH1.5
         - ADMINS-APP
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      description: |
+        店舗マスタ(ステーション・本部・オーナー店舗)情報を削除する
+      security:
+        - MEMBER-TOKEN: []
   '/api/shops/{shopId}/calendar':
     parameters:
       - schema:
@@ -7046,7 +7256,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: false
@@ -7055,7 +7265,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: false
@@ -7070,7 +7280,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7079,7 +7289,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7104,7 +7314,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7113,7 +7323,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7138,7 +7348,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7147,7 +7357,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7172,7 +7382,7 @@ paths:
                       - chargeType: 1
                         chargeTypeStr: 急速
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7181,7 +7391,7 @@ paths:
                       - chargeType: 2
                         chargeTypeStr: 普通
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/sp_default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default2.png'
                         chargersCount: 2
                         chargersBlankCount: 2
                         disableFlg: true
@@ -7320,12 +7530,12 @@ paths:
         - MEMBER-TOKEN: []
     parameters:
       - schema:
-          type: string
+          type: integer
         name: shopId
         in: path
         required: true
       - schema:
-          type: string
+          type: integer
         name: chargerType
         in: path
         required: true
@@ -7767,7 +7977,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: null
                         reservesInfo: []
@@ -7778,7 +7988,7 @@ paths:
                         chargerTypeName: 普通
                         chargerOutput: 100/200 V
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default2.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7798,7 +8008,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7818,7 +8028,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 2
                         windowStatus: null
                         reservesInfo:
@@ -7838,7 +8048,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: null
                         reservesInfo:
@@ -7858,7 +8068,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_CONTROL
                         reservesInfo:
@@ -7878,7 +8088,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_UNLOCK
                         reservesInfo:
@@ -7898,7 +8108,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_FINISH
                         reservesInfo:
@@ -7918,7 +8128,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGER_ERROR
                         reservesInfo:
@@ -7938,7 +8148,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: CHARGER_MAINTENANCE
                         reservesInfo: []
@@ -7952,7 +8162,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: null
                         reservesInfo: []
@@ -7963,7 +8173,7 @@ paths:
                         chargerTypeName: 普通
                         chargerOutput: 100/200 V
                         chargerUnitPrice: 30
-                        chargerImagUrl: 'http://localhost/storage/chargers/default2.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default2.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -7983,7 +8193,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 1
                         windowStatus: null
                         reservesInfo:
@@ -8003,7 +8213,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 2
                         windowStatus: null
                         reservesInfo:
@@ -8023,7 +8233,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: null
                         reservesInfo:
@@ -8043,7 +8253,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_CONTROL
                         reservesInfo:
@@ -8063,7 +8273,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_UNLOCK
                         reservesInfo:
@@ -8083,7 +8293,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGING_FINISH
                         reservesInfo:
@@ -8103,7 +8313,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 3
                         windowStatus: CHARGER_ERROR
                         reservesInfo:
@@ -8123,7 +8333,7 @@ paths:
                         chargerTypeName: 急速
                         chargerOutput: 最大50kW
                         chargerUnitPrice: 50
-                        chargerImagUrl: 'http://localhost/storage/chargers/default1.png'
+                        chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/default1.png'
                         status: 0
                         windowStatus: CHARGER_MAINTENANCE
                         reservesInfo: []
@@ -10865,7 +11075,7 @@ paths:
                     chargeTypeName: 急速
                     chargerOutlet: CHAdeMO
                     chargeOutput: 100/200 V
-                    chargerImagUrl: 'http://localhost/storage/chargers/sp_default1.png'
+                    chargerImagUrl: 'https://webapp.cleanenergylabo.jp/storage/chargers/sp_default1.png'
                     chargerUnitPrice: 40
                     expectChargerTime: 30
                     expectChargePrice: 1200
@@ -11392,7 +11602,7 @@ paths:
         in: path
         required: true
     post:
-      summary: 予約精算プッシュ通知
+      summary: 予約精算
       tags:
         - Reserve
         - PH1.0
@@ -14162,7 +14372,7 @@ paths:
                     code: 1
                     title: 珈琲半額クーポン
                     body: 店内にて無料プレゼント
-                    imageUrl: 'http://localhost/storage/coupons/img1.png'
+                    imageUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img1.png'
                     note: 対象店舗でのみご利用いただけます。事前にご確認ください
                     shopId: 0
                     shopName: null
@@ -14195,7 +14405,7 @@ paths:
                     code: 1
                     title: 珈琲半額クーポン
                     body: 店内にて無料プレゼント
-                    imageUrl: 'http://localhost/storage/coupons/img1.png'
+                    imageUrl: 'https://webapp.cleanenergylabo.jp/storage/coupons/img1.png'
                     note: 対象店舗でのみご利用いただけます。事前にご確認ください
                     shopId: 0
                     shopName: null
@@ -16657,15 +16867,15 @@ paths:
       parameters:
         - schema:
             type: string
-            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
-            example: '2023-01-01 10:00:00'
+            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]$'
+            example: '2023-01-01 10:00'
           in: query
           name: searchFromAt
           description: 期間指定_開始
         - schema:
             type: string
-            example: '2023-01-31 23:59:59'
-            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+            example: '2023-01-31 23:59'
+            pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]$'
           in: query
           name: searchToAt
           description: 期間指定_終了
@@ -16698,7 +16908,7 @@ paths:
             type: string
           in: query
           name: orderBy
-          description: '並替順[{"startAt":False},{"shopName":True}]'
+          description: '並替順[{"startAt":"False"},{"shopName":"True"}]'
     parameters:
       - schema:
           type: integer
@@ -17022,7 +17232,7 @@ paths:
                   shopImageUrl:
                     type: string
                     description: 店舗画像
-                    example: 'http://localhost/storage/shops/img1.png'
+                    example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                     nullable: true
                   isWorkWeekSun:
                     type: boolean
@@ -17134,12 +17344,12 @@ paths:
                     description: 営業_祝日_稼働フラグ
                     example: true
                     nullable: true
-                  weekHolidayStartTime:
+                  holidayStartTime:
                     type: string
                     description: 営業_祝日_開始時間
                     example: '09:00:00'
                     nullable: true
-                  weekHolidayCloseTime:
+                  holidayCloseTime:
                     type: string
                     description: 営業_祝日_終了時間
                     example: '19:00:00'
@@ -17157,7 +17367,7 @@ paths:
                     phoneNumber: 090-1234-5678
                     faxNumber: 090-1234-5678
                     shopInfo: 店舗情報
-                    shopImageUrl: 'http://localhost/storage/shops/img1.png'
+                    shopImageUrl: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                     isWorkWeekSun: true
                     weekSunStartTime: '09:00:00'
                     weekSunCloseTime: '18:00:00'
@@ -17294,10 +17504,6 @@ paths:
                           type: string
                           description: チャージャ名
                           example: 東1番口
-                        operationType:
-                          type: integer
-                          description: 運用タイプ
-                          example: 0
                         note:
                           type: string
                           description: 備考
@@ -17324,7 +17530,6 @@ paths:
                         - shopId
                         - shopName
                         - chargerName
-                        - operationType
                         - workStartDate
                 required:
                   - dataCount
@@ -17338,7 +17543,6 @@ paths:
                         shopId: 1
                         shopName: イオンモール 茨城店
                         chargerName: 東1番口
-                        operationType: 0
                         note: 北側第一駐車場
                         groupId: 1
                         groupName: A
@@ -17442,10 +17646,6 @@ paths:
                     type: string
                     description: チャージャトークン
                     example: AbcdefGghf1543
-                  operationType:
-                    type: integer
-                    description: 運用タイプ
-                    example: 0
                   note:
                     type: string
                     description: 備考
@@ -17465,7 +17665,6 @@ paths:
                   - shopName
                   - chargerName
                   - qrBarcodeUrl
-                  - operationType
               examples:
                 Example 1:
                   value:
@@ -17473,7 +17672,6 @@ paths:
                     shopName: イオンモール茨城
                     chargerName: 東1番口
                     qrBarcodeUrl: AbcdefGghf1543
-                    operationType: 0
                     note: 北側第一駐車場
                     groupName: A
                     workStartDate: '2023-01-01'
@@ -17615,10 +17813,15 @@ paths:
                           description: 最大充電可能時間
                           example: 3
                           nullable: true
-                        controlCurrent:
-                          type: number
-                          description: 制御電流
-                          example: 60
+                        useChargerNum:
+                          type: integer
+                          description: 使用台数
+                          example: 3
+                          nullable: true
+                        userNum:
+                          type: integer
+                          example: 3
+                          description: 利用人数
                           nullable: true
                       required:
                         - shopName
@@ -17626,6 +17829,22 @@ paths:
                         - chargerNum
                 required:
                   - dataCount
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 0
+                    list:
+                      - id: 1
+                        shopName: イオンモール茨城
+                        name: Aグループ
+                        chargerNum: 5
+                        operationType: 1
+                        sharedFlg: false
+                        unitPrice: 50
+                        nighttimeUnitPrice: 25
+                        guestUnitPrice: 40
+                        enableChargeHours: 3
+                        controlCurrent: 60
         '400':
           description: Bad Request
           content:
@@ -17874,26 +18093,35 @@ paths:
                           type: string
                           description: メールアドレス
                           example: matsumoto@arashi.com
+                          minLength: 1
+                          maxLength: 255
                         memberName:
                           type: string
                           description: 会員名
                           example: 大野智
+                          minLength: 0
+                          maxLength: 30
                           nullable: true
-                        chargerName:
+                        groupName:
                           type: string
-                          description: 対象チャージャ
-                          example: 北側駐車場1番
+                          description: チャージャグループ
+                          example: 北側駐車場
+                          minLength: 0
+                          maxLength: 20
                           nullable: true
                         shopName:
                           type: string
                           description: 店舗名
                           example: ハイツ公園前
+                          minLength: 0
+                          maxLength: 20
                           nullable: true
                         stopDate:
                           type: string
                           format: date
                           description: 停止日
                           example: '2023-03-15'
+                          pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
                           nullable: true
                       required:
                         - id
@@ -17951,6 +18179,11 @@ paths:
           in: query
           description: 検索店舗ID
           name: searchShopId
+        - schema:
+            type: string
+          in: query
+          name: orderBy
+          description: '並替順[{"status":"False"},{"memberName":"True"}]'
     post:
       summary: 利用メンバ登録
       tags:
@@ -18036,10 +18269,20 @@ paths:
                     type: string
                     description: メールアドレス
                     example: matsumoto@arashi.com
+                    minLength: 1
+                    maxLength: 255
                   memberName:
                     type: string
                     description: 会員名
                     example: 大野智
+                    minLength: 0
+                    maxLength: 30
+                    nullable: true
+                  stopDate:
+                    type: string
+                    format: date
+                    description: 停止日
+                    example: '2023-03-15'
                     nullable: true
                   chargerList:
                     type: array
@@ -18047,24 +18290,51 @@ paths:
                     items:
                       type: object
                       properties:
+                        sharedFlg:
+                          type: boolean
+                          default: false
+                          description: 種別
                         chargerId:
                           type: integer
+                          example: 1
+                          description: チャージャID
+                          nullable: true
                         chargerName:
                           type: string
-                          description: 対象チャージャ
+                          description: チャージャ
                           example: 北側駐車場1番
+                          minLength: 0
+                          maxLength: 30
+                          nullable: true
+                        groupId:
+                          type: integer
+                          example: 1
+                          description: チャージャグループID
+                        groupName:
+                          type: string
+                          description: チャージャグループ
+                          example: 北側駐車場
+                          minLength: 1
+                          maxLength: 20
                         shopId:
                           type: integer
+                          description: 店舗ID
+                          example: 1
                         shopName:
                           type: string
                           description: 店舗名
                           example: ハイツ公園前
-                  stopDate:
-                    type: string
-                    format: date
-                    description: 停止日
-                    example: '2023-03-15'
-                    nullable: true
+                          minLength: 1
+                          maxLength: 20
+                      required:
+                        - sharedFlg
+                        - groupId
+                        - groupName
+                        - shopId
+                        - shopName
+                required:
+                  - status
+                  - mailAddr
         '401':
           description: Unauthorized
           content:
@@ -18155,7 +18425,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error500'
-  '/api/owners/{ownerId}/use-members/{useMemberId}/approval':
+  '/api/owners/{ownerId}/use-members/{useMemberId}/certification':
     parameters:
       - schema:
           type: integer
@@ -18170,23 +18440,149 @@ paths:
         required: true
         description: 利用メンバID
     post:
-      summary: 利用メンバ承認
+      summary: 利用メンバ認証
       operationId: post-api-owners-ownerId-use-members-useMemberId-approval
       description: |-
         利用メンバを承認する
+
         【利用場面】
+        OW.07.画面設計_利用メンバ一覧
       tags:
         - Owner-Use-Member
         - PH2.0
       responses:
         '200':
           description: OK
+  '/api/owners/{ownerId}/use-members/select-chargers':
+    parameters:
+      - schema:
+          type: string
+        name: ownerId
+        in: path
+        required: true
+    get:
+      summary: 利用メンバ選択チャージャ取得
+      tags:
+        - Owner-Use-Member
+        - PH2.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataCount:
+                    type: integer
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        groupId:
+                          type: integer
+                          example: 1
+                          description: チャージャグループID
+                        groupName:
+                          type: string
+                          example: 北側駐車場
+                          minLength: 1
+                          maxLength: 20
+                          description: チャージャグループ
+                        chargerId:
+                          type: integer
+                          example: 1
+                          description: チャージャID
+                          nullable: true
+                        chargerName:
+                          type: string
+                          example: 北側駐車場１番
+                          minLength: 0
+                          maxLength: 30
+                          nullable: true
+                        shopId:
+                          type: integer
+                          example: 1
+                          description: 店舗ID
+                        shopName:
+                          type: string
+                          minLength: 1
+                          maxLength: 20
+                          example: ハイツ公園前
+                          description: 店舗
+                        userNum:
+                          type: integer
+                          example: 3
+                          description: 利用人数
+                          nullable: true
+                      required:
+                        - groupId
+                        - groupName
+                        - shopId
+                        - shopName
+              examples:
+                Example 1:
+                  value:
+                    dataCount: 1
+                    list:
+                      - groupId: 1
+                        groupName: 北側駐車場
+                        chargerId: 1
+                        chargerName: 北側駐車場１番
+                        shopId: 1
+                        shopName: ハイツ公園前
+                        userNum: 3
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error403'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      operationId: get-api-owners-ownerId-use-members-select-chargers
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: searchSharedFlg
+          description: 検索共用フラグ
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: searchShopId
+          description: 検索店舗ID
+      description: |-
+        利用メンバが選択できるチャージャ情報を取得する
+
+        【利用場面】
+        OW.07.画面設計_利用メンバ一覧
   /api/owners/collation:
     post:
       summary: オーナー照合
       description: |-
         オーナーを照合する
         【利用場面】
+
+        https://projects.invisionapp.com/share/3B1344OES4UP#/screens/471488690
       tags:
         - Owner
         - PH1.5
@@ -18206,12 +18602,15 @@ paths:
                     type: string
                     description: 帳票名
                     example: イオンモール茨木\n中居太郎
+                    minLength: 1
+                    maxLength: 61
                   honorific:
                     type: string
                     minLength: 0
                     maxLength: 5
                     description: 敬称
                     example: 様
+                    nullable: true
                   postNumber:
                     type: string
                     description: 郵便番号
@@ -18223,30 +18622,38 @@ paths:
                     type: string
                     description: 都道府県
                     example: 大阪府
+                    minLength: 1
+                    maxLength: 5
                   addr1:
                     type: string
                     description: 住所１
                     example: 茨木市
+                    minLength: 1
+                    maxLength: 30
                   addr2:
                     type: string
-                    nullable: true
                     description: 住所２
                     example: 松ヶ本町８－３０
+                    minLength: 0
+                    maxLength: 30
+                    nullable: true
                   paymentOptionCode:
                     type: integer
                     description: 支払方法コード
                     example: 1
                   note:
                     type: string
-                    nullable: true
                     example: オーナー備考
                     description: 備考
+                    minLength: 0
+                    maxLength: 255
+                    nullable: true
                 required:
+                  - ownerId
                   - reportName
                   - postNumber
                   - addrRegion
                   - addr1
-                  - ownerId
                   - paymentOptionCode
               examples:
                 Example 1:
@@ -18328,23 +18735,33 @@ paths:
                           type: string
                           description: 取引先番号（"CO"＋オーナーID5桁0埋め）
                           example: CO00001
+                          minLength: 7
+                          maxLength: 7
                         ownerName:
                           type: string
                           description: 取引先名
                           example: イオンモール
+                          minLength: 1
+                          maxLength: 30
                         contactName:
                           type: string
-                          nullable: true
                           example: 中居太郎
                           description: 担当者名
+                          minLength: 0
+                          maxLength: 30
+                          nullable: true
                         phoneNumber:
                           type: string
                           example: 06-1111-1111
                           description: 電話番号
+                          minLength: 1
+                          maxLength: 15
                         addrRegion:
                           type: string
                           example: 大阪
                           description: 都道府県
+                          minLength: 1
+                          maxLength: 5
                         shopNum:
                           type: integer
                           example: 5
@@ -18513,39 +18930,58 @@ paths:
                     example: イオンモール
                   contactName:
                     type: string
-                    nullable: true
                     description: 担当者名
                     example: 中居太郎
+                    minLength: 0
+                    maxLength: 30
+                    nullable: true
                   mailAddr:
                     type: string
                     description: メールアドレス
                     example: nakai@eaon-maill.co.jp
+                    minLength: 1
                   defaultPassword:
                     type: string
-                    nullable: true
                     description: 初期パスワード
-                    example: abcdef1234
+<<<<<<< HEAD
+                    example: abcdef1234Asbdt#
+=======
+                    example: e33I!1fHPTJbc@WJGEkm
+                    minLength: 20
+                    maxLength: 20
+>>>>>>> 95a23b79266c017e2caa5878a201808d90ff57e4
+                    nullable: true
                   phoneNumber:
                     type: string
                     description: 電話番号
                     example: 090-1234-5678
+                    minLength: 1
+                    maxLength: 15
                   postNumber:
                     type: string
                     description: 郵便番号
                     example: 〒111-1111
+                    minLength: 9
+                    maxLength: 9
                   addrRegion:
                     type: string
                     description: 都道府県
                     example: 大阪
+                    minLength: 1
+                    maxLength: 5
                   addr1:
                     type: string
                     description: 住所１
                     example: 茨木市
+                    minLength: 1
+                    maxLength: 30
                   addr2:
                     type: string
-                    nullable: true
                     description: 住所２
                     example: 松が本町8-30
+                    minLength: 0
+                    maxLength: 30
+                    nullable: true
                   closingDateCode:
                     type: integer
                     description: 締め日コード
@@ -18554,6 +18990,8 @@ paths:
                     type: string
                     description: 締め日
                     example: 月末
+                    minLength: 1
+                    maxLength: 30
                   paymentOptionCode:
                     type: integer
                     description: 支払方法コード
@@ -18562,46 +19000,62 @@ paths:
                     type: string
                     description: 支払方法
                     example: 振込
+                    minLength: 1
+                    maxLength: 30
                   reportName:
                     type: string
-                    nullable: true
                     description: 帳票宛先名
                     example: イオンモール\n中居 太郎
+                    minLength: 0
+                    maxLength: 60
+                    nullable: true
                   honorific:
                     type: string
-                    nullable: true
                     description: 帳票敬称
                     example: 様
+                    minLength: 0
+                    maxLength: 5
+                    nullable: true
                   note:
                     type: string
-                    nullable: true
                     description: 備考
                     example: オーナー備考
+                    minLength: 0
+                    maxLength: 255
+                    nullable: true
                   transferAccountName:
                     type: string
-                    nullable: true
                     description: 振込先口座名称（支払方法コードが「1(振込)」の場合は必須入力）
                     example: EV運用口座
+                    minLength: 0
+                    maxLength: 30
+                    nullable: true
                   transferAccountNumber:
                     type: string
-                    nullable: true
                     description: 振込先口座番号（支払方法コードが「1(振込)」の場合は必須入力）
                     example: '12345678'
+                    minLength: 0
+                    maxLength: 8
+                    nullable: true
                   transferAccountTypeName:
                     type: string
-                    nullable: true
                     description: 振込先口座種類（支払方法コードが「1(振込)」の場合は必須入力）
                     example: 当座
+                    nullable: true
                   transferBank:
                     type: string
-                    nullable: true
                     description: 振込先口座銀行名（支払方法コードが「1(振込)」の場合は必須入力）
                     example: りそな
+                    minLength: 0
+                    maxLength: 10
+                    nullable: true
                   transferBankBranch:
                     type: string
-                    nullable: true
                     description: 振込先口座支店名（支払方法コードが「1(振込)」の場合は必須入力）
                     example: 梅田支店
+                    minLength: 0
+                    maxLength: 10
+                    nullable: true
                 required:
                   - customerNumber
                   - ownerName
@@ -18709,6 +19163,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error500'
       description: オーナー情報を削除する
+      security: []
   /api/sys/division-masters/pl-statements:
     get:
       summary: 区分マスタ-明細書項目カテゴリ一覧取得
@@ -20401,6 +20856,430 @@ components:
       x-stoplight:
         id: c3489106265bf
   requestBodies:
+    Shop:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: コード
+                example: S0001
+                maxLength: 5
+                pattern: '^[a-zA-Z0-9]+$'
+              category:
+                type: integer
+                description: 店舗種別
+                example: 1
+              name:
+                type: string
+                description: 店舗名
+                example: ステーション茨木店
+                minLength: 0
+                maxLength: 20
+              postNumber:
+                type: integer
+                description: 郵便番号
+                example: 1234567
+                minimum: 1
+                maximum: 9999999
+              addrRegion:
+                type: string
+                description: 都道府県
+                example: 大阪府
+                minLength: 1
+                maxLength: 5
+              addr1:
+                type: string
+                description: 住所１
+                example: 茨木市
+                minLength: 1
+                maxLength: 30
+              addr2:
+                type: string
+                description: 住所２
+                example: 松が本町8-30
+                minLength: 0
+                maxLength: 30
+                nullable: true
+              phoneNumber:
+                type: string
+                description: 電話番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+              faxNumber:
+                type: string
+                description: FAX番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+                nullable: true
+              shopInfo:
+                type: string
+                description: 店舗情報
+                example: 店舗情報
+                minLength: 0
+                maxLength: 255
+                nullable: true
+              shopImageUrl:
+                type: string
+                description: 店舗画像
+                example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
+                nullable: true
+              isWorkWeekSun:
+                type: boolean
+                description: 営業_日_稼働フラグ
+                example: true
+                nullable: true
+              weekSunStartTime:
+                type: string
+                description: 営業_日_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekSunCloseTime:
+                type: string
+                description: 営業_日_終了時間
+                example: '18:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekMon:
+                type: boolean
+                description: 営業_月_稼働フラグ
+                example: true
+                nullable: true
+              weekMonStartTime:
+                type: string
+                description: 営業_月_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekMonCloseTime:
+                type: string
+                description: 営業_月_終了時間
+                example: '18:10:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekTue:
+                type: boolean
+                description: 営業_火_稼働フラグ
+                example: true
+                nullable: true
+              weekTueStartTime:
+                type: string
+                description: 営業_火_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekTueCloseTime:
+                type: string
+                description: 営業_火_終了時間
+                example: '18:20:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekWed:
+                type: boolean
+                description: 営業_水_稼働フラグ
+                example: true
+                nullable: true
+              weekWedStartTime:
+                type: string
+                description: 営業_水_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekWedCloseTime:
+                type: string
+                description: 営業_水_終了時間
+                example: '18:30:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekThu:
+                type: boolean
+                description: 営業_木_稼働フラグ
+                example: true
+                nullable: true
+              weekThuStartTime:
+                type: string
+                description: 営業_木_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekThuCloseTime:
+                type: string
+                description: 営業_木_終了時間
+                example: '18:40:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekFri:
+                type: boolean
+                description: 営業_金_稼働フラグ
+                example: true
+                nullable: true
+              weekFriStartTime:
+                type: string
+                description: 営業_金_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekFriCloseTime:
+                type: string
+                description: 営業_金_終了時間
+                example: '18:50:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekSat:
+                type: boolean
+                description: 営業_土_稼働フラグ
+                example: true
+                nullable: true
+              weekSatStartTime:
+                type: string
+                description: 営業_土_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekSatCloseTime:
+                type: string
+                description: 営業_土_終了時間
+                example: '19:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkHoliday:
+                type: boolean
+                description: 営業_祝日_稼働フラグ
+                example: true
+                nullable: true
+              holidayStartTime:
+                type: string
+                description: 営業_祝日_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              holidayCloseTime:
+                type: string
+                description: 営業_祝日_終了時間
+                example: '19:00:00'
+                nullable: true
+            required:
+              - code
+              - category
+              - name
+              - postNumber
+              - addr1
+              - phoneNumber
+    ShopOwner:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownerId:
+                type: integer
+                description: オーナーID
+                example: 1
+                minimum: 1
+              name:
+                type: string
+                description: 店舗名
+                minLength: 0
+                maxLength: 20
+                example: オーナー店舗名
+              postNumber:
+                type: integer
+                description: 郵便番号
+                example: 1234567
+              addrRegion:
+                type: string
+                description: 都道府県
+                example: 大阪府
+                minLength: 1
+                maxLength: 5
+              addr1:
+                type: string
+                description: 住所１
+                example: 茨木市
+                minLength: 1
+                maxLength: 30
+              addr2:
+                type: string
+                description: 住所２
+                example: 松が本町8-30
+                minLength: 0
+                maxLength: 30
+                nullable: true
+              phoneNumber:
+                type: string
+                description: 電話番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+              faxNumber:
+                type: string
+                description: FAX番号
+                example: 090-1234-5678
+                minLength: 1
+                maxLength: 15
+                pattern: '^(([0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4})|([0-9]{8,11}))$'
+                nullable: true
+              shopInfo:
+                type: string
+                description: 店舗情報
+                example: 店舗情報
+                minLength: 0
+                maxLength: 255
+                nullable: true
+              shopImageUrl:
+                type: string
+                description: 店舗画像
+                example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
+                nullable: true
+              isWorkWeekSun:
+                type: boolean
+                description: 営業_日_稼働フラグ
+                example: true
+              weekSunStartTime:
+                type: string
+                description: 営業_日_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekSunCloseTime:
+                type: string
+                description: 営業_日_終了時間
+                example: '18:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekMon:
+                type: boolean
+                description: 営業_月_稼働フラグ
+                example: true
+              weekMonStartTime:
+                type: string
+                description: 営業_月_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekMonCloseTime:
+                type: string
+                description: 営業_月_終了時間
+                example: '18:10:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekTue:
+                type: boolean
+                description: 営業_火_稼働フラグ
+                example: true
+              weekTueStartTime:
+                type: string
+                description: 営業_火_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekTueCloseTime:
+                type: string
+                description: 営業_火_終了時間
+                example: '18:20:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekWed:
+                type: boolean
+                description: 営業_水_稼働フラグ
+                example: true
+              weekWedStartTime:
+                type: string
+                description: 営業_水_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekWedCloseTime:
+                type: string
+                description: 営業_水_終了時間
+                example: '18:30:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekThu:
+                type: boolean
+                description: 営業_木_稼働フラグ
+                example: true
+              weekThuStartTime:
+                type: string
+                description: 営業_木_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekThuCloseTime:
+                type: string
+                description: 営業_木_終了時間
+                example: '18:40:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekFri:
+                type: boolean
+                description: 営業_金_稼働フラグ
+                example: true
+              weekFriStartTime:
+                type: string
+                description: 営業_金_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekFriCloseTime:
+                type: string
+                description: 営業_金_終了時間
+                example: '18:50:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkWeekSat:
+                type: boolean
+                description: 営業_土_稼働フラグ
+                example: true
+              weekSatStartTime:
+                type: string
+                description: 営業_土_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              weekSatCloseTime:
+                type: string
+                description: 営業_土_終了時間
+                example: '19:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              isWorkHoliday:
+                type: boolean
+                description: 営業_祝日_稼働フラグ
+                example: true
+              holidayStartTime:
+                type: string
+                description: 営業_祝日_開始時間
+                example: '09:00:00'
+                pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+                nullable: true
+              holidayCloseTime:
+                type: string
+                description: 営業_祝日_終了時間
+                example: '19:00:00'
+                nullable: true
+            required:
+              - ownerId
+              - name
+              - postNumber
+              - addrRegion
+              - addr2
+              - isWorkWeekSun
+              - isWorkWeekMon
+              - isWorkWeekTue
+              - isWorkWeekWed
+              - isWorkWeekThu
+              - isWorkWeekFri
+              - isWorkWeekSat
+              - isWorkHoliday
     Owner:
       content:
         application/json:
@@ -20415,11 +21294,11 @@ components:
                 example: イオンモール
               contactName:
                 type: string
-                nullable: true
                 minLength: 0
                 maxLength: 30
                 description: 担当者名
                 example: 中居太郎
+                nullable: true
               mailAddr:
                 type: string
                 maxLength: 255
@@ -20452,11 +21331,11 @@ components:
                 maxLength: 30
               addr2:
                 type: string
-                nullable: true
                 description: 住所２
                 example: 松が本町8-30
                 minLength: 0
                 maxLength: 30
+                nullable: true
               closingDateCode:
                 type: integer
                 description: 締め日コード
@@ -20467,60 +21346,60 @@ components:
                 example: 1
               reportName:
                 type: string
-                nullable: true
                 description: 帳票宛先名
                 minLength: 0
                 maxLength: 60
                 example: イオンモール\n田中
+                nullable: true
               honorific:
                 type: string
-                nullable: true
                 description: 帳票敬称
                 minLength: 0
                 maxLength: 5
                 example: 様
+                nullable: true
               note:
                 type: string
-                nullable: true
                 description: 備考
                 minLength: 0
                 maxLength: 255
                 example: オーナー備考
+                nullable: true
               transferAccountName:
                 type: string
-                nullable: true
                 description: 振込先口座名称（支払方法コードが「1(振込)」の場合は必須入力）
                 minLength: 0
                 maxLength: 30
                 example: EV運用口座
+                nullable: true
               transferAccountNumber:
                 type: string
-                nullable: true
                 description: 振込先口座番号（支払方法コードが「1(振込)」の場合は必須入力）
                 minLength: 0
                 maxLength: 8
                 example: '01234567'
+                nullable: true
               transferAccountTypeName:
                 type: string
-                nullable: true
                 description: 振込先口座種類（支払方法コードが「1(振込)」の場合は必須入力）
                 maxLength: 10
                 minLength: 0
                 example: 当座
+                nullable: true
               transferBank:
                 type: string
-                nullable: true
                 description: 振込先口座銀行名（支払方法コードが「1(振込)」の場合は必須入力）
                 minLength: 0
                 maxLength: 10
                 example: りそな銀行
+                nullable: true
               transferBankBranch:
                 type: string
-                nullable: true
                 description: 振込先口座支店名（支払方法コードが「1(振込)」の場合は必須入力）
                 minLength: 0
                 maxLength: 10
                 example: 梅田支店
+                nullable: true
             required:
               - ownerName
               - mailAddr
@@ -20677,7 +21556,7 @@ components:
             Example 1:
               value:
                 ownerId: 1
-                Id: 1
+                shopId: 1
                 name: Aグループ
                 chargerType: 1
                 isLimitrUnitPrice: true
@@ -21053,7 +21932,7 @@ components:
               shopImageUrl:
                 type: string
                 description: 店舗画像
-                example: 'http://localhost/storage/shops/img1.png'
+                example: 'https://webapp.cleanenergylabo.jp/storage/shops/img1.png'
                 nullable: true
               isWorkWeekSun:
                 type: boolean
@@ -21216,13 +22095,19 @@ components:
           schema:
             type: object
             properties:
+              name:
+                type: string
+                description: グループ名
+                minLength: 1
+                maxLength: 20
+                example: Bグループ名
               enableChargeHours:
                 type: integer
                 example: 4
                 description: 最大充電可能時間
-                nullable: true
                 minimum: 0
                 maximum: 99
+                nullable: true
               unitPrice:
                 type: number
                 description: 料金単価
@@ -21233,9 +22118,9 @@ components:
                 type: number
                 description: 深夜料金単価
                 example: 25
-                nullable: true
                 minimum: 0
                 maximum: 999
+                nullable: true
               guestUnitPrice:
                 type: number
                 description: 来客単価
@@ -21244,6 +22129,7 @@ components:
                 maximum: 999
                 nullable: true
             required:
+              - name
               - unitPrice
     OwnerUseMember:
       content:
@@ -21258,15 +22144,37 @@ components:
                 format: email
                 description: メールアドレス
                 example: nakai@eaon-maill.co.jp
+              stopDate:
+                type: string
+                example: '2023-03-15'
+                pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+                description: 停止日
+                nullable: true
               chargerList:
                 type: array
+                description: チャージャリスト
                 items:
                   type: object
                   properties:
                     chargerId:
                       type: integer
+                      description: チャージャID
+                      example: 1
+                      nullable: true
+                    groupId:
+                      type: integer
+                      example: 1
+                      description: チャージャグループID
                     shopId:
                       type: integer
+                      description: 店舗ID
+                      example: 1
+                  required:
+                    - groupId
+                    - shopId
+            required:
+              - chargerList
+      description: ''
 tags:
   - name: System
     description: システムに関する API 群です
