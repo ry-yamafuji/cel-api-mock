@@ -7161,7 +7161,7 @@ paths:
                       type: object
                       properties:
                         chargeType:
-                          type: number
+                          type: integer
                           example: 1
                           description: 充電タイプ
                         chargeTypeStr:
