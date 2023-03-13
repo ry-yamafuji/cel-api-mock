@@ -17818,11 +17818,6 @@ paths:
                           description: 使用台数
                           example: 3
                           nullable: true
-                        userNum:
-                          type: integer
-                          example: 3
-                          description: 利用人数
-                          nullable: true
                       required:
                         - shopName
                         - name
@@ -18943,13 +18938,7 @@ paths:
                   defaultPassword:
                     type: string
                     description: 初期パスワード
-<<<<<<< HEAD
                     example: abcdef1234Asbdt#
-=======
-                    example: e33I!1fHPTJbc@WJGEkm
-                    minLength: 20
-                    maxLength: 20
->>>>>>> 95a23b79266c017e2caa5878a201808d90ff57e4
                     nullable: true
                   phoneNumber:
                     type: string
