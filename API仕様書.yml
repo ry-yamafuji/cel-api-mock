@@ -5377,7 +5377,7 @@ paths:
                       properties:
                         id:
                           type: integer
-                          description: 店舗ID                            
+                          description: 店舗ID
                           example: 1
                         customerNumber:
                           type: string
@@ -7212,11 +7212,9 @@ paths:
                         description: 予約ID
                       startAt:
                         type: string
-                        format: date-time
                         description: 予約開始日時
                       endAt:
                         type: string
-                        format: date-time
                         description: 予約終了日時
                       shopId:
                         type: integer
